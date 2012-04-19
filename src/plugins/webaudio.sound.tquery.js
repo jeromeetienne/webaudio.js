@@ -2,7 +2,7 @@
 /**
  * follow a object3D
 */
-tQuery.WebAudio.Sound.fn.follow	= function(object3d, world){
+WebAudio.Sound.fn.follow	= function(object3d, world){
 	console.assert( this.isFollowing() === false );
 	// handle parameter
 	if( object3d instanceof tQuery.Object3D ){
@@ -24,7 +24,7 @@ tQuery.WebAudio.Sound.fn.follow	= function(object3d, world){
 /**
  * unfollow the object3D if any
 */
-tQuery.WebAudio.Sound.fn.unfollow	= function(world){
+WebAudio.Sound.fn.unfollow	= function(world){
 	this._world.loop().unhook(this._followCb);
 	this._followCb		= null;
 	// for chained API
@@ -34,7 +34,7 @@ tQuery.WebAudio.Sound.fn.unfollow	= function(world){
 /**
  * @returns {Boolean} true if this sound is following a object3d, false overwise
 */
-tQuery.WebAudio.Sound.prototype.isFollowing	= function(){
+WebAudio.Sound.prototype.isFollowing	= function(){
 	return this._followCb ? true : false;
 	// for chained API
 	return this;

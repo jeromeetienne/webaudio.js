@@ -5,9 +5,10 @@ tQuery.World.register('enableWebAudio', function(){
 	// sanity check
 	console.assert( this.hasWebAudio() === false, "there is already a webaudio" );
 	// intenciate a tQuery.World.WebAudio
-	var webaudio	= new tQuery.WebAudio();
-	// follow the listener 
-	webaudio.followListener(this);
+	var webaudio	= new WebAudio();
+	// follow the listener
+	var world	= this;
+	webaudio.followListener(world);
 	// store webaudio in the world
 	tQuery.data(this, "webaudio", webaudio);
 	// for chained API
@@ -33,12 +34,12 @@ tQuery.World.register('hasWebAudio', function(){
 });
 
 tQuery.World.register('supportWebAudio', function(){
-	return tQuery.WebAudio.isAvailable;
+	return WebAudio.isAvailable;
 });
 
 tQuery.register('createSound', function(world, nodeChain){
 	world	= world || tQuery.world;
-	return new tQuery.WebAudio.Sound(world.getWebAudio(), nodeChain);
+	return new WebAudio.Sound(world.getWebAudio(), nodeChain);
 });
 
 
@@ -46,20 +47,20 @@ tQuery.register('createSound', function(world, nodeChain){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.WebAudio.fn.followListener	= function(world){
+WebAudio.fn.followListener	= function(world){
 	this._$followListenerCb	= function(deltaTime){
 		this._followListenerCb(world.camera(), deltaTime);
 	}.bind(this);
 	world.loop().hook(this._$followListenerCb);
 }
 
-tQuery.WebAudio.fn.unfollowListener	= function(world){
+WebAudio.fn.unfollowListener	= function(world){
 	// unhook this._updateCb from this.world.loop()
 	world.loop().unhook(this._$followListenerCb);
 	this._$followListenerCb	= null;
 }
 
-tQuery.WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
+WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 	var context	= this._ctx;
 	// sanity check on parameters
 	console.assert( object3d instanceof THREE.Object3D );

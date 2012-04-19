@@ -3,16 +3,17 @@
 tQuery = {};
 </script>
 
-<script src="../webaudio.js"></script>
-<script src="../webaudio.nodechainbuilder.js"></script>
-<script src="../webaudio.sound.js"></script>
+<script src="../src/webaudio.js"></script>
+<script src="../src/webaudio.nodechainbuilder.js"></script>
+<script src="../src/webaudio.sound.js"></script>
 
 <!--
 <script src="../build/webaudio.js"></script>
 -->
 <body><script>
-	var webaudio	= new tQuery.WebAudio();
-	var sound	= new tQuery.WebAudio.Sound(webaudio);	
+	var webaudio	= new WebAudio();
+	var sound	= webaudio.createSound();
+
 
 //	var sound	= tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
 	sound.load('sounds/techno.mp3', function(sound){

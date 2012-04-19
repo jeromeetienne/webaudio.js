@@ -19,13 +19,13 @@
  * * find which one
  * * tQuery.Webaudio got a world link for the listener
  *   * do a plugin with followListener(world), unfollowListener(world)
- * * namespace become WebAudio.* instead of tQuery.WebAudio.*
+ * * namespace become WebAudio.* instead of WebAudio.*
 */
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-//		tQuery.WebAudio							//
+//		WebAudio							//
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -40,9 +40,9 @@
  *
  * @param {tQuery.World} [world] the world on which to run 
 */
-tQuery.WebAudio	= function(){
+WebAudio	= function(){
 	// sanity check - the api MUST be available
-	console.assert(tQuery.WebAudio.isAvailable === true, 'webkitAudioContext isnt available on your browser');
+	console.assert(WebAudio.isAvailable === true, 'webkitAudioContext isnt available on your browser');
 
 	// create the context
 	this._ctx	= new webkitAudioContext();
@@ -57,12 +57,12 @@ tQuery.WebAudio	= function(){
 
 
 // vendor.js way to make plugins ala jQuery
-tQuery.WebAudio.fn	= tQuery.WebAudio.prototype;
+WebAudio.fn	= WebAudio.prototype;
 
 /**
  * destructor
 */
-tQuery.WebAudio.prototype.destroy	= function(){
+WebAudio.prototype.destroy	= function(){
 };
 
 /**
@@ -70,7 +70,7 @@ tQuery.WebAudio.prototype.destroy	= function(){
  *
  * @return {Boolean} true if it is available or not
 */
-tQuery.WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
+WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -81,14 +81,27 @@ tQuery.WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
  *
  * @returns {AudioContext} the audio context
 */
-tQuery.WebAudio.prototype.context	= function(){
+WebAudio.prototype.context	= function(){
 	return this._ctx;
 };
 
 /**
+ * Create a sound
+ *
+ * @returns {WebAudio.Sound} the sound just created
+*/
+WebAudio.prototype.createSound	= function()
+{
+	var webaudio	= this;
+	var sound	= new WebAudio.Sound(webaudio);
+	return sound;
+}
+
+
+/**
  * return the entry node in the master node chains
 */
-tQuery.WebAudio.prototype._entryNode	= function(){
+WebAudio.prototype._entryNode	= function(){
 	//return this._ctx.destination;
 	return this._gainNode;
 }
@@ -96,7 +109,7 @@ tQuery.WebAudio.prototype._entryNode	= function(){
 /**
  * getter/setter on the volume
 */
-tQuery.WebAudio.prototype.volume	= function(value){
+WebAudio.prototype.volume	= function(value){
 	if( value === undefined )	return this._gainNode.gain.value;
 	this._gainNode.gain.value	= value;
 	return this;

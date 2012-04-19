@@ -1,10 +1,10 @@
 /**
  * Constructor
  *
- * @class builder to generate nodes chains. Used in tQuery.WebAudio.Sound
+ * @class builder to generate nodes chains. Used in WebAudio.Sound
  * @param {webkitAudioContext} audioContext the audio context
 */
-tQuery.WebAudio.NodeChainBuilder	= function(audioContext){
+WebAudio.NodeChainBuilder	= function(audioContext){
 	console.assert( audioContext instanceof webkitAudioContext );
 	this._context	= audioContext;
 	this._firstNode	= null;
@@ -15,31 +15,31 @@ tQuery.WebAudio.NodeChainBuilder	= function(audioContext){
 /**
  * destructor
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.destroy	= function(){
+WebAudio.NodeChainBuilder.prototype.destroy	= function(){
 };
 
 /**
  * getter for the nodes
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.nodes	= function(){
+WebAudio.NodeChainBuilder.prototype.nodes	= function(){
 	return this._nodes;
 }
 
 /**
  * @returns the first node of the chain
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.first	= function(){
+WebAudio.NodeChainBuilder.prototype.first	= function(){
 	return this._firstNode;
 }
 
 /**
  * @returns the last node of the chain
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.last	= function(){
+WebAudio.NodeChainBuilder.prototype.last	= function(){
 	return this._lastNode;
 }
 
-tQuery.WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
+WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 {
 	// update this._bufferSourceDst - needed for .cloneBufferSource()
 	var lastIsBufferSource	= this._lastNode && ('playbackRate' in this._lastNode) ? true : false;
@@ -66,7 +66,7 @@ tQuery.WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
  * Clone the bufferSource. Used just before playing a sound
  * @returns {AudioBufferSourceNode} the clone AudioBufferSourceNode
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
+WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
 	console.assert(this._nodes.bufferSource, "no buffersource presents. Add one.");
 	var orig	= this._nodes.bufferSource;
 	var clone	= this._context.createBufferSource()
@@ -82,7 +82,7 @@ tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
  *
  * @param {Object} [properties] properties to set in the created node
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
+WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 	var node		= this._context.createBufferSource()
 	this._nodes.bufferSource= node;
 	return this._addNode(node, properties)
@@ -93,7 +93,7 @@ tQuery.WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
  * 
  * @param {Object} [properties] properties to set in the created node
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.panner	= function(properties){
+WebAudio.NodeChainBuilder.prototype.panner	= function(properties){
 	var node		= this._context.createPanner()
 	this._nodes.panner	= node;
 	return this._addNode(node, properties)
@@ -104,7 +104,7 @@ tQuery.WebAudio.NodeChainBuilder.prototype.panner	= function(properties){
  *
  * @param {Object} [properties] properties to set in the created node
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
+WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
 	var node		= this._context.createAnalyser()
 	this._nodes.analyser	= node;
 	return this._addNode(node, properties)
@@ -115,7 +115,7 @@ tQuery.WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
  *
  * @param {Object} [properties] properties to set in the created node
 */
-tQuery.WebAudio.NodeChainBuilder.prototype.gainNode	= function(properties){
+WebAudio.NodeChainBuilder.prototype.gainNode	= function(properties){
 	var node		= this._context.createGainNode()
 	this._nodes.gainNode	= node;
 	return this._addNode(node, properties)

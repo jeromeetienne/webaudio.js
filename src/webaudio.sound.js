@@ -1,24 +1,24 @@
 /**
  * sound instance
  *
- * @class Handle one sound for tQuery.WebAudio
+ * @class Handle one sound for WebAudio
  *
  * @param {tQuery.World} [world] the world on which to run
- * @param {tQuery.WebAudio.NodeChainBuilder} [nodeChain] the nodeChain to use
+ * @param {WebAudio.NodeChainBuilder} [nodeChain] the nodeChain to use
 */
-tQuery.WebAudio.Sound	= function(webaudio, nodeChain){
+WebAudio.Sound	= function(webaudio, nodeChain){
 	this._webaudio	= webaudio;
 	this._context	= this._webaudio.context();
 
-	console.assert( this._webaudio instanceof tQuery.WebAudio );
+	console.assert( this._webaudio instanceof WebAudio );
 
 	// create a default NodeChainBuilder if needed
 	if( nodeChain === undefined ){
-		nodeChain	= new tQuery.WebAudio.NodeChainBuilder(this._context)
+		nodeChain	= new WebAudio.NodeChainBuilder(this._context)
 					.bufferSource().gainNode().analyser().panner();
 	}
 	// setup this._chain
-	console.assert( nodeChain instanceof tQuery.WebAudio.NodeChainBuilder );
+	console.assert( nodeChain instanceof WebAudio.NodeChainBuilder );
 	this._chain	= nodeChain;
 
 	// connect this._chain.last() node to this._webaudio._entryNode()
@@ -40,7 +40,7 @@ tQuery.WebAudio.Sound	= function(webaudio, nodeChain){
 /**
  * destructor
 */
-tQuery.WebAudio.Sound.prototype.destroy	= function(){
+WebAudio.Sound.prototype.destroy	= function(){
 	// disconnect from this._webaudio
 	this._chain.last().disconnect();
 	// destroy this._chain
@@ -49,7 +49,7 @@ tQuery.WebAudio.Sound.prototype.destroy	= function(){
 };
 
 // vendor.js way to make plugins ala jQuery
-tQuery.WebAudio.Sound.fn	= tQuery.WebAudio.Sound.prototype;
+WebAudio.Sound.fn	= WebAudio.Sound.prototype;
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -58,14 +58,14 @@ tQuery.WebAudio.Sound.fn	= tQuery.WebAudio.Sound.prototype;
 /**
  * getter of the chain nodes
 */
-tQuery.WebAudio.Sound.prototype.nodes	= function(){
+WebAudio.Sound.prototype.nodes	= function(){
 	return this._chain.nodes();
 };
 
 /**
  * @returns {Boolean} true if the sound is playable, false otherwise
 */
-tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
+WebAudio.Sound.prototype.isPlayable	= function(){
 	return this._source.buffer ? true : false;
 };
 
@@ -74,7 +74,7 @@ tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
  *
  * @param {Number} [time] time when to play the sound
 */
-tQuery.WebAudio.Sound.prototype.play		= function(time){
+WebAudio.Sound.prototype.play		= function(time){
 	if( time ===  undefined )	time	= 0;
 	// clone the bufferSource
 	var clonedNode	= this._chain.cloneBufferSource();
@@ -98,7 +98,7 @@ tQuery.WebAudio.Sound.prototype.play		= function(time){
  *
  * @param {Number} [value] the value to set, if not provided, get current value
 */
-tQuery.WebAudio.Sound.prototype.volume	= function(value){
+WebAudio.Sound.prototype.volume	= function(value){
 	if( value === undefined )	return this._gainNode.gain.value;
 	this._gainNode.gain.value	= value;
 	return this;	// for chained API
@@ -110,7 +110,7 @@ tQuery.WebAudio.Sound.prototype.volume	= function(value){
  * 
  * @param {Number} [value] the value to set, if not provided, get current value
 */
-tQuery.WebAudio.Sound.prototype.loop	= function(value){
+WebAudio.Sound.prototype.loop	= function(value){
 	if( value === undefined )	return this._source.loop;
 	this._source.loop	= value;
 	return this;	// for chained API
@@ -123,7 +123,7 @@ tQuery.WebAudio.Sound.prototype.loop	= function(value){
  * @param {Number} outerAngle the outer cone hangle in radian
  * @param {Number} outerGain the gain to apply when in the outerCone
 */
-tQuery.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, outerGain)
+WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, outerGain)
 {
 	this._panner.coneInnerAngle	= innerAngle * 180 / Math.PI;
 	this._panner.coneOuterAngle	= outerAngle * 180 / Math.PI;
@@ -136,7 +136,7 @@ tQuery.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, ou
  * 
  * @param {Number} value the angle in radian
 */
-tQuery.WebAudio.Sound.prototype.pannerConeInnerAngle	= function(value){
+WebAudio.Sound.prototype.pannerConeInnerAngle	= function(value){
 	if( value === undefined )	return this._panner.coneInnerAngle / 180 * Math.PI;
 	this._panner.coneInnerAngle	= value * 180 / Math.PI;
 	return this;	// for chained API
@@ -147,7 +147,7 @@ tQuery.WebAudio.Sound.prototype.pannerConeInnerAngle	= function(value){
  *
  * @param {Number} value the angle in radian
 */
-tQuery.WebAudio.Sound.prototype.pannerConeOuterAngle	= function(value){
+WebAudio.Sound.prototype.pannerConeOuterAngle	= function(value){
 	if( value === undefined )	return this._panner.coneOuterAngle / 180 * Math.PI;
 	this._panner.coneOuterAngle	= value * 180 / Math.PI;
 	return this;	// for chained API
@@ -158,7 +158,7 @@ tQuery.WebAudio.Sound.prototype.pannerConeOuterAngle	= function(value){
  * 
  * @param {Number} value the value
 */
-tQuery.WebAudio.Sound.prototype.pannerConeOuterGain	= function(value){
+WebAudio.Sound.prototype.pannerConeOuterGain	= function(value){
 	if( value === undefined )	return this._panner.coneOuterGain;
 	this._panner.coneOuterGain	= value;
 	return this;	// for chained API
@@ -170,7 +170,7 @@ tQuery.WebAudio.Sound.prototype.pannerConeOuterGain	= function(value){
  * @param {Number} width the number of frequencyBin to take into account
  * @returns {Number} return the amplitude of the sound
 */
-tQuery.WebAudio.Sound.prototype.amplitude	= function(width)
+WebAudio.Sound.prototype.amplitude	= function(width)
 {
 	// handle paramerter
 	width		= width !== undefined ? width : 2;
@@ -200,7 +200,7 @@ tQuery.WebAudio.Sound.prototype.amplitude	= function(width)
  * @param {String} url the url of the sound to load
  * @param {Function} callback function to notify once the url is loaded (optional)
 */
-tQuery.WebAudio.Sound.prototype.load = function(url, callback){
+WebAudio.Sound.prototype.load = function(url, callback){
 	this._loadAndDecodeSound(url, function(buffer){
 		this._source.buffer	= buffer;
 		callback && callback(this);
@@ -217,7 +217,7 @@ tQuery.WebAudio.Sound.prototype.load = function(url, callback){
  * @param {Function} onLoad the function called when the sound is loaded and decoded (optional)
  * @param {Function} onError the function called when an error occured (optional)
 */
-tQuery.WebAudio.Sound.prototype._loadAndDecodeSound	= function(url, onLoad, onError){
+WebAudio.Sound.prototype._loadAndDecodeSound	= function(url, onLoad, onError){
 	var context	= this._context;
 	var request	= new XMLHttpRequest();
 	request.open('GET', url, true);

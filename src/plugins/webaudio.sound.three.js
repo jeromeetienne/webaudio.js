@@ -4,7 +4,7 @@
  * @param {THREE.Object3D} object3d the object which originate the source
  * @param {Number} deltaTime the number of seconds since last update
 */
-tQuery.WebAudio.Sound.fn.updateWithObject3d	= function(object3d, deltaTime){
+WebAudio.Sound.fn.updateWithObject3d	= function(object3d, deltaTime){
 	// sanity check on parameters
 	console.assert( object3d instanceof THREE.Object3D );
 	console.assert( typeof(deltaTime) === 'number' );
@@ -23,7 +23,7 @@ tQuery.WebAudio.Sound.fn.updateWithObject3d	= function(object3d, deltaTime){
  * @param {THREE.Matrix4} matrixWorld the matrixWorld describing the position of the sound
  * @param {Number} deltaTime the number of seconds since last update
 */
-tQuery.WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
+WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 	// sanity check on parameters
 	console.assert( matrixWorld instanceof THREE.Matrix4 );
 	console.assert( typeof(deltaTime) === 'number' );
