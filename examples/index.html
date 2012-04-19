@@ -1,29 +1,12 @@
 <!doctype html><title>webaudio.js basic</title>
-<script>
-tQuery = {};
-</script>
-
-<script src="../src/webaudio.js"></script>
-<script src="../src/webaudio.nodechainbuilder.js"></script>
-<script src="../src/webaudio.sound.js"></script>
-
-<!--
 <script src="../build/webaudio.js"></script>
--->
 <body><script>
-	var webaudio	= new WebAudio();
-	var sound	= webaudio.createSound();
-
-
-//	var sound	= tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
+	// init the library
+	var webaudio = new WebAudio();
+	// create a sound
+	var sound = webaudio.createSound();
+	// load sound.wav and play it
 	sound.load('sounds/techno.mp3', function(sound){
-		//sound.nodes().bufferSource.loop	= true;
-		//sound.volume(1);
-		//sound.loop(true);
-		sound.loop(true);
-		var source	= sound.play();
-		setTimeout(function(){
-			//source.stop();
-		}, 200)
+	    sound.play();
 	});
 </script></body>
