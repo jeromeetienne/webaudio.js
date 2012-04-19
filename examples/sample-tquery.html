@@ -6,6 +6,8 @@
 <script src="../src/webaudio.nodechainbuilder.js"></script>
 <script src="../src/webaudio.sound.js"></script>
 <script src="../src/plugins/webaudio.tquery.js"></script>
+<script src="../src/plugins/webaudio.sound.three.js"></script>
+<script src="../src/plugins/webaudio.sound.tquery.js"></script>
 
 <!--
 <script src="../build/webaudio-bundle.js"></script>
@@ -13,17 +15,21 @@
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+
 //	world.removeCameraControls();
 	world.enableWebAudio();
 
-//	var sound	= tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
+	var object3d	= tQuery.createTorus().addTo(world);
+	tQuery.createAxis().addTo(object3d);
+
 	var sound	= tQuery.createSound().load('sounds/techno.mp3', function(sound){
 		//sound.nodes().bufferSource.loop	= true;
 		//sound.volume(1);
-		//sound.loop(true);
+		sound.loop(true);
 		var source	= sound.play();
 		setTimeout(function(){
 			//source.stop();
 		}, 200)
 	});
+	sound.follow(object3d, world);
 </script></body>
