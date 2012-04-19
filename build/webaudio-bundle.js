@@ -58,8 +58,12 @@ WebAudio	= function(){
 };
 
 
-// vendor.js way to make plugins ala jQuery
+/**
+ * vendor.js way to make plugins ala jQuery
+ * @namespace
+*/
 WebAudio.fn	= WebAudio.prototype;
+
 
 /**
  * destructor
@@ -290,7 +294,10 @@ WebAudio.Sound.prototype.destroy	= function(){
 	this._chain	= null;
 };
 
-// vendor.js way to make plugins ala jQuery
+/**
+ * vendor.js way to make plugins ala jQuery
+ * @namespace
+*/
 WebAudio.Sound.fn	= WebAudio.Sound.prototype;
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -475,6 +482,33 @@ WebAudio.Sound.prototype._loadAndDecodeSound	= function(url, onLoad, onError){
 	// actually start the request
 	request.send();
 }
+/**
+ * gowiththeflow.js - a javascript flow control micro library
+ * https://github.com/jeromeetienne/gowiththeflow.js
+*/
+WebAudio.Flow	= function(){
+	var self, stack = [], timerId = setTimeout(function(){ timerId = null; self._next(); }, 0);
+	return self = {
+		destroy : function(){ timerId && clearTimeout(timerId); },
+		par	: function(callback, isSeq){
+			if(isSeq || !(stack[stack.length-1] instanceof Array)) stack.push([]);
+			stack[stack.length-1].push(callback);
+			return self;
+		},seq	: function(callback){ return self.par(callback, true);	},
+		_next	: function(err, result){
+			var errors = [], results = [], callbacks = stack.shift() || [], nbReturn = callbacks.length, isSeq = nbReturn == 1;
+			for(var i = 0; i < callbacks.length; i++){
+				(function(fct, index){
+					fct(function(error, result){
+						errors[index]	= error;
+						results[index]	= result;		
+						if(--nbReturn == 0)	self._next(isSeq?errors[0]:errors, isSeq?results[0]:results)
+					}, err, result)
+				})(callbacks[i], i);
+			}
+		}
+	}
+};
 /**
  * Update the source with object3d. usefull for positional sounds
  * 

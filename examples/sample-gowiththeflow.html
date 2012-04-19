@@ -6,7 +6,7 @@
 	// create the sounds
 	var soundTechno	= webaudio.createSound();
 	var soundPill	= webaudio.createSound();
-	// launch the loads
+	// launch the loads with gowiththeflow.js - https://github.com/jeromeetienne/gowiththeflow.js
 	WebAudio.Flow().par(function(next){
 		soundTechno.load('sounds/techno.mp3', next);
 	}).par(function(next){

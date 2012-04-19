@@ -56,8 +56,12 @@ WebAudio	= function(){
 };
 
 
-// vendor.js way to make plugins ala jQuery
+/**
+ * vendor.js way to make plugins ala jQuery
+ * @namespace
+*/
 WebAudio.fn	= WebAudio.prototype;
+
 
 /**
  * destructor

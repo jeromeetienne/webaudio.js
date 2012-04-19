@@ -1,0 +1,129 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * Tutorials:
+<span class='line'>  3</span>  * http://www.html5rocks.com/en/tutorials/webaudio/games/
+<span class='line'>  4</span>  * http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/ &lt;- +1 as it is three.js
+<span class='line'>  5</span>  * http://www.html5rocks.com/en/tutorials/webaudio/intro/
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  * Spec:
+<span class='line'>  8</span>  * https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+<span class='line'>  9</span>  *
+<span class='line'> 10</span>  * Chromium Demo:
+<span class='line'> 11</span>  * http://chromium.googlecode.com/svn/trunk/samples/audio/index.html  &lt;- running page
+<span class='line'> 12</span>  * http://code.google.com/p/chromium/source/browse/trunk/samples/audio/ &lt;- source
+<span class='line'> 13</span> */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> 
+<span class='line'> 16</span> </span><span class="COMM">/**
+<span class='line'> 17</span>  * Notes on removing tQuery dependancy
+<span class='line'> 18</span>  * * some stuff depends on tQuery
+<span class='line'> 19</span>  * * find which one
+<span class='line'> 20</span>  * * tQuery.Webaudio got a world link for the listener
+<span class='line'> 21</span>  *   * do a plugin with followListener(world), unfollowListener(world)
+<span class='line'> 22</span>  * * namespace become WebAudio.* instead of WebAudio.*
+<span class='line'> 23</span> */</span><span class="WHIT">
+<span class='line'> 24</span> 
+<span class='line'> 25</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="COMM">//		WebAudio							//</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span> 
+<span class='line'> 34</span> </span><span class="COMM">/**
+<span class='line'> 35</span>  * Main class to handle webkit audio
+<span class='line'> 36</span>  * 
+<span class='line'> 37</span>  * TODO make the clip detector from http://www.html5rocks.com/en/tutorials/webaudio/games/
+<span class='line'> 38</span>  *
+<span class='line'> 39</span>  * @class Handle webkit audio API
+<span class='line'> 40</span>  *
+<span class='line'> 41</span>  * @param {tQuery.World} [world] the world on which to run 
+<span class='line'> 42</span> */</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="NAME">WebAudio</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check - the api MUST be available</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">WebAudio.isAvailable</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'webkitAudioContext isnt available on your browser'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> 
+<span class='line'> 47</span> </span><span class="WHIT">	</span><span class="COMM">// create the context</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">	</span><span class="NAME">this._ctx</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">webkitAudioContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> 
+<span class='line'> 50</span> </span><span class="WHIT">	</span><span class="COMM">// setup the end of the node chain</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">	</span><span class="COMM">// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ </span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ctx.createGainNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">	</span><span class="NAME">this._compressor</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ctx.createDynamicsCompressor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode.connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._compressor</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">	</span><span class="NAME">this._compressor.connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._ctx.destination</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	
+<span class='line'> 56</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 57</span> 
+<span class='line'> 58</span> 
+<span class='line'> 59</span> </span><span class="COMM">/**
+<span class='line'> 60</span>  * vendor.js way to make plugins ala jQuery
+<span class='line'> 61</span>  * @namespace
+<span class='line'> 62</span> */</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="NAME">WebAudio.fn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">WebAudio.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 64</span> 
+<span class='line'> 65</span> 
+<span class='line'> 66</span> </span><span class="COMM">/**
+<span class='line'> 67</span>  * destructor
+<span class='line'> 68</span> */</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="NAME">WebAudio.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span> 
+<span class='line'> 72</span> </span><span class="COMM">/**
+<span class='line'> 73</span>  * 
+<span class='line'> 74</span>  *
+<span class='line'> 75</span>  * @return {Boolean} true if it is available or not
+<span class='line'> 76</span> */</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="NAME">WebAudio.isAvailable</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.webkitAudioContext</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> 
+<span class='line'> 79</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 82</span> 
+<span class='line'> 83</span> </span><span class="COMM">/**
+<span class='line'> 84</span>  * get the audio context
+<span class='line'> 85</span>  *
+<span class='line'> 86</span>  * @returns {AudioContext} the audio context
+<span class='line'> 87</span> */</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="NAME">WebAudio.prototype.context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._ctx</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span> 
+<span class='line'> 92</span> </span><span class="COMM">/**
+<span class='line'> 93</span>  * Create a sound
+<span class='line'> 94</span>  *
+<span class='line'> 95</span>  * @returns {WebAudio.Sound} the sound just created
+<span class='line'> 96</span> */</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="NAME">WebAudio.prototype.createSound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">webaudio</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">WebAudio.Sound</span><span class="PUNC">(</span><span class="NAME">webaudio</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">sound</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span> 
+<span class='line'>105</span> </span><span class="COMM">/**
+<span class='line'>106</span>  * return the entry node in the master node chains
+<span class='line'>107</span> */</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="NAME">WebAudio.prototype._entryNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">	</span><span class="COMM">//return this._ctx.destination;</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._gainNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>112</span> 
+<span class='line'>113</span> </span><span class="COMM">/**
+<span class='line'>114</span>  * getter/setter on the volume
+<span class='line'>115</span> */</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="NAME">WebAudio.prototype.volume</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._gainNode.gain.value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode.gain.value</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span> 
+<span class='line'>122</span> </span></pre></body></html>
