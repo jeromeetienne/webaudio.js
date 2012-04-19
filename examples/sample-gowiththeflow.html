@@ -1,0 +1,20 @@
+<!doctype html><title>webaudio.js basic</title>
+<script src="../build/webaudio.js"></script>
+<body><script>
+	// init the library
+	var webaudio	= new WebAudio();
+	// create the sounds
+	var soundTechno	= webaudio.createSound();
+	var soundPill	= webaudio.createSound();
+	// launch the loads
+	WebAudio.Flow().par(function(next){
+		soundTechno.load('sounds/techno.mp3', next);
+	}).par(function(next){
+		soundPill.load('sounds/eatpill.mp3', next);
+	}).seq(function(){
+		// ensure they are loaded
+		console.assert( soundPill.isPlayable() );
+		console.assert( soundTechno.isPlayable() );
+		console.log("loaded");
+	});
+</script></body>

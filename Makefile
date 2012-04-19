@@ -16,6 +16,7 @@ buildCore:
 	cat src/webaudio.js			>> build/webaudio.js
 	cat src/webaudio.nodechainbuilder.js	>> build/webaudio.js
 	cat src/webaudio.sound.js		>> build/webaudio.js
+	cat src/webaudio.loader.js		>> build/webaudio.js
 
 buildBundle: buildCore
 	echo 			 > build/webaudio-bundle.js
