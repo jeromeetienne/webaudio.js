@@ -6,11 +6,11 @@ It is a direct adaptation of
 
 ```javascript
 // init the library
-var webaudio	= new WebAudio();
+var webaudio = new WebAudio();
 // create a sound
-var sound	= webaudio.createSound();
+var sound = webaudio.createSound();
 // load sound.wav and play it
 sound.load('sound.wav', function(sound){
-	sound.play();
+    sound.play();
 });
 ```
