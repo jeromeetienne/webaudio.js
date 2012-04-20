@@ -27,21 +27,21 @@ docs:
 #		Build								#
 #################################################################################
 
-build:	buildCore minifyCore buildBundle minifyBundle
+build:	buildLib minifyLib buildBundle minifyBundle
 
-buildCore:
+buildLib:
 	echo 				 	 > build/webaudio.js
-	cat src/webaudio.js			>> build/webaudio.js
+	cat src/webaudio.core.js		>> build/webaudio.js
 	cat src/webaudio.nodechainbuilder.js	>> build/webaudio.js
 	cat src/webaudio.sound.js		>> build/webaudio.js
 	cat src/webaudio.loader.js		>> build/webaudio.js
 
-buildBundle: buildCore
+buildBundle: buildLib
 	echo 			 > build/webaudio-bundle.js
 	cat build/webaudio.js	>> build/webaudio-bundle.js
 	cat src/plugins/*.js	>> build/webaudio-bundle.js
 
-minifyCore:
+minifyLib:
 	curl --data-urlencode "js_code@build/webaudio.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile		\

@@ -1,0 +1,47 @@
+<!doctype html><title>webaudio.js basic</title>
+<script src="../build/webaudio.js"></script>
+<style>
+body {
+	margin	: 0px;
+	padding	: 0px;
+	overflow: hidden;
+}
+</style>
+<body><script>
+	var canvas	= document.createElement('canvas');
+	canvas.width	= window.innerWidth;
+	canvas.height	= window.innerHeight;
+	document.body.appendChild(canvas)
+	var ctx		= canvas.getContext("2d");  
+
+	var freqByte	= new Uint8Array(canvas.width);
+
+	// init the library
+	var webaudio	= new WebAudio();
+	var update	= function(){
+		// get analyser node
+		var analyser	= sound.nodes().analyser;
+		// get the data
+		analyser.getByteFrequencyData(freqByte);
+		//analyser.getByteTimeDomainData(freqByte)
+		
+		// clear the canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// draw canvas
+		ctx.fillStyle	= "rgb(200,0,0)";
+		for(var i = 0; i < canvas.width; i++){
+			var height	= freqByte[i] / 256 * canvas.height
+			ctx.fillRect(i, canvas.height-height, 1, height)  
+		}
+	};
+	// create a sound
+	var url		= 'sounds/techno.mp3';
+	//var url		= 'sounds/eatpill.mp3'
+	var sound	= webaudio.createSound().load(url, function(sound){
+		setInterval(function(){
+			update();
+		}, 1000/60);
+
+		sound.loop(true).play();
+	});
+</script></body>
