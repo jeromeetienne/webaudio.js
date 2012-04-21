@@ -1,0 +1,56 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="tquery-bundle.js"></script>
+<script src="tquery.planet.js"></script>
+<script src="fireball/tquery.fireballmaterial.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// add lights
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+
+	var tLight	= new THREE.PointLight(0xFFAAAA, 10);
+	tLight.position.set(0,0,0)
+
+	tQuery(tLight).addTo(world);
+
+
+	world.renderer().setClearColorHex(0)
+	
+
+	// create a planet
+	var url		= 'images/moon_1024.jpg';
+	var url		= 'images/mercurymap.jpg';
+	var url		= 'images/sunmap.jpg';
+
+	// sun
+	var planet	= new tQuery.Planet({
+		textureUrl	: 'images/sunmap.jpg',
+		radiusOrbit	: 0,
+		periodOrbit	: 1
+	});
+	planet.object3d().addTo(world);
+	planet.planet().useFileballMaterial(2);
+
+
+	// earth	
+	var planet	= new tQuery.Planet({
+		textureUrl	: 'images/moon_1024.jpg',
+		radiusOrbit	: 1,
+		periodOrbit	: 2,
+		axialTilt	: -23*Math.PI/180
+	});
+	planet.object3d().addTo(world);
+
+	// mercury
+	var planet	= new tQuery.Planet({
+		textureUrl	: 'images/mercurymap.jpg',
+		radiusOrbit	: 2,
+		periodOrbit	: 3,
+		scale		: 0.2
+	});
+	planet.object3d().addTo(world);
+
+</script></body>
