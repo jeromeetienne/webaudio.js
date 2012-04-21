@@ -11,8 +11,8 @@ tQuery.register('Planet', function(opts){
 	this._world	= opts.world;
 	// create a planet
 	this._planet	= tQuery.createSphere();
-	//this._planet.material(new THREE.MeshLambertMaterial({
-	this._planet.material(new THREE.MeshPhongMaterial({
+	this._planet.material(new THREE.MeshLambertMaterial({
+	//this._planet.material(new THREE.MeshPhongMaterial({
 		ambient	: 0xFFFFFF,
 		color	: 0x444444,
 		map	: THREE.ImageUtils.loadTexture(opts.textureUrl)

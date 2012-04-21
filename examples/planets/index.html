@@ -3,6 +3,10 @@
 <script src="tquery.planet.js"></script>
 <script src="fireball/tquery.fireballmaterial.js"></script>
 
+<script src="tquery.planet.js"></script>
+
+
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
@@ -35,9 +39,10 @@
 	planet.planet().useFileballMaterial(2);
 
 
-	// earth	
+	// moon	
 	var planet	= new tQuery.Planet({
 		textureUrl	: 'images/moon_1024.jpg',
+		textureUrl	: 'images/earth_atmos_2048.jpg',
 		radiusOrbit	: 1,
 		periodOrbit	: 2,
 		axialTilt	: -23*Math.PI/180
