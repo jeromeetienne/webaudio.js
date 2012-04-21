@@ -3,12 +3,28 @@
 <script src="tquery.planet.js"></script>
 <script src="fireball/tquery.fireballmaterial.js"></script>
 
-<script src="tquery.planet.js"></script>
+<script src="../../src/webaudio.core.js"></script>
+<script src="../../src/webaudio.nodechainbuilder.js"></script>
+<script src="../../src/webaudio.sound.js"></script>
 
-
+<script src="background.js"></script>
+<style>
+#background {
+	position	: absolute;
+	top		: 0;
+	left		: 0;
+	z-index		: -1;
+	background	: black;
+}
+</style>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.renderer().setClearColorHex( 0x000000, 0 );
+
+	// init the library
+	var webaudio	= new WebAudio();
 
 	// add lights
 	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
@@ -21,41 +37,54 @@
 	tQuery(tLight).addTo(world);
 
 
-	world.renderer().setClearColorHex(0)
-	
-
 	// create a planet
 	var url		= 'images/moon_1024.jpg';
 	var url		= 'images/mercurymap.jpg';
 	var url		= 'images/sunmap.jpg';
 
 	// sun
-	var planet	= new tQuery.Planet({
-		textureUrl	: 'images/sunmap.jpg',
-		radiusOrbit	: 0,
-		periodOrbit	: 1
-	});
-	planet.object3d().addTo(world);
-	planet.planet().useFileballMaterial(2);
-
+	if( true ){
+		var planet	= new tQuery.Planet({
+			textureUrl	: 'images/sunmap.jpg',
+			soundUrl	: '../sounds/eatpill.mp3',
+			radiusOrbit	: 0,
+			periodOrbit	: 1
+		});
+		planet.object3d().addTo(world);
+		//planet.planet().useFileballMaterial(2);
+	}
 
 	// moon	
-	var planet	= new tQuery.Planet({
-		textureUrl	: 'images/moon_1024.jpg',
-		textureUrl	: 'images/earth_atmos_2048.jpg',
-		radiusOrbit	: 1,
-		periodOrbit	: 2,
-		axialTilt	: -23*Math.PI/180
-	});
-	planet.object3d().addTo(world);
+	if( true ){
+		var planet	= new tQuery.Planet({
+			textureUrl	: 'images/moon_1024.jpg',
+			//textureUrl	: 'images/earth_atmos_2048.jpg',
+			soundUrl	: '../sounds/eatpill.mp3',
+			radiusOrbit	: 1,
+			periodOrbit	: 2,
+			axialTilt	: -23*Math.PI/180
+		});
+		planet.object3d().addTo(world);
+		setInterval(function(){
+			//planet.tick();
+		}, 500);
+		console.log("moon", planet.sound())
+		var moon = planet;
+		//planet.sound();
+	}
+	
 
 	// mercury
-	var planet	= new tQuery.Planet({
-		textureUrl	: 'images/mercurymap.jpg',
-		radiusOrbit	: 2,
-		periodOrbit	: 3,
-		scale		: 0.2
-	});
-	planet.object3d().addTo(world);
+	if( true ){
+		var planet	= new tQuery.Planet({
+			textureUrl	: 'images/mercurymap.jpg',
+			soundUrl	: '../sounds/eatpill.mp3',
+			radiusOrbit	: 2,
+			periodOrbit	: 3,
+			scale		: 0.2
+		});
+		planet.object3d().addTo(world);		
+	}
+	backgroundInit();
 
 </script></body>

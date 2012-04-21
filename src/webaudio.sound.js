@@ -257,7 +257,7 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
 		var barW	= Math.floor(srcArr.length / dstLength);
 		var nBar	= Math.floor(srcArr.length / barW);
 		var arr		= []
-		for(var x = 0, arrIdx = 0; x < canvas.width; arrIdx++){
+		for(var x = 0, arrIdx = 0; x < srcArr.length; arrIdx++){
 			var sum	= 0;
 			for(var i = 0; i < barW; i++, x++){
 				sum += srcArr[x];

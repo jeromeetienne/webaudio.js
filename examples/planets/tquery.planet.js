@@ -7,6 +7,7 @@ tQuery.register('Planet', function(opts){
 		scale		: 1
 	});
 	console.assert(opts.textureUrl);
+	console.assert(opts.soundUrl);
 
 	this._world	= opts.world;
 	// create a planet
@@ -18,6 +19,11 @@ tQuery.register('Planet', function(opts){
 		map	: THREE.ImageUtils.loadTexture(opts.textureUrl)
 	})).addTo(world).scale(opts.scale);
 
+	// create a sound
+	var sound	= this._sound = webaudio.createSound();
+	// load sound.wav and play it
+	sound.load(opts.soundUrl);
+
 
 	this._planet.rotation(0,0, opts.axialTilt)
 	this._planet.get(0).eulerOrder	= 'ZXY';
@@ -26,7 +32,7 @@ tQuery.register('Planet', function(opts){
 	this._object.add(this._planet);
 
 	
-	this._$update	= this._update.bind(this);
+	this._$update	= this._loopCb.bind(this);
 	this._world.loop().hook(this._$update);
 });
 
@@ -40,8 +46,18 @@ tQuery.Planet.prototype.object3d	= function(){
 tQuery.Planet.prototype.planet	= function(){
 	return this._planet;
 }
+tQuery.Planet.prototype.sound	= function(){
+	return this._sound;
+}
 
-tQuery.Planet.prototype._update	= function(deltaTime, present)
+/**
+*/
+tQuery.Planet.prototype.tick	= function(){
+	this._sound.play();
+	return this;	// for chained API
+}
+
+tQuery.Planet.prototype._loopCb	= function(deltaTime, present)
 {
 	var radiusOrbit	= this._opts.radiusOrbit;
 	var periodOrbit	= this._opts.periodOrbit;
@@ -51,4 +67,9 @@ tQuery.Planet.prototype._update	= function(deltaTime, present)
 	this._object.position(positionX,0,positionZ)
 
 	this._planet.rotateY(0.01)
+	
+	// scale the planet depending on sound amplitude
+	var amplitude	= this._sound.amplitude();
+	var scale	= 0.1 + amplitude * 0.9;
+	this._planet.scale(scale);
 };
