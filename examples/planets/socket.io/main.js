@@ -1,5 +1,5 @@
-//var socket = io.connect('http://127.0.0.1:8001');
-var socket = io.connect('http://192.168.43.130:8000');
+var socket = io.connect('http://127.0.0.1:8001');
+//var socket = io.connect('http://192.168.43.130:8000');
 
 socket.on('handshake', function(data){
 	console.log(data);
