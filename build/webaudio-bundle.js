@@ -366,6 +366,18 @@ WebAudio.Sound.prototype.loop	= function(value){
 };
 
 /**
+ * getter/setter on the source buffer
+ * 
+ * @param {Number} [value] the value to set, if not provided, get current value
+*/
+WebAudio.Sound.prototype.buffer	= function(value){
+	if( value === undefined )	return this._source.buffer;
+	this._source.buffer	= value;
+	return this;	// for chained API
+};
+
+
+/**
  * Set parameter for the pannerCone
  *
  * @param {Number} innerAngle the inner cone hangle in radian
@@ -437,6 +449,74 @@ WebAudio.Sound.prototype.amplitude	= function(width)
 	var amplitude	= sum / (width*256-1);
 	// return ampliture
 	return amplitude;
+}
+
+/**
+ * Generate a sinusoid buffer.
+ * FIXME should likely be in a plugin
+*/
+WebAudio.Sound.prototype.tone	= function(hertz, seconds){
+	// handle parameter
+	hertz	= hertz !== undefined ? hertz : 200;
+	seconds	= seconds !== undefined ? seconds : 1;
+	// set default value	
+	var nChannels	= 1;
+	var sampleRate	= 44100;
+	var amplitude	= 2;
+	// create the buffer
+	var buffer	= webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
+	var fArray	= buffer.getChannelData(0);
+	// filli the buffer
+	for(var i = 0; i < fArray.length; i++){
+		var time	= i / buffer.sampleRate;
+		var angle	= hertz * time * Math.PI;
+		fArray[i]	= Math.sin(angle)*amplitude;
+	}
+	// set the buffer
+	this.buffer(buffer).loop(true);
+	return this;	// for chained API
+}
+
+
+/**
+ * Put this function is .Sound with getByt as private callback
+*/
+WebAudio.Sound.prototype.makeHistogram	= function(nBar)
+{	
+	// get analyser node
+	var analyser	= this._analyser;
+	// allocate the private histo if needed - to avoid allocating at every frame
+	//this._privHisto	= this._privHisto || new Float32Array(analyser.frequencyBinCount);
+	this._privHisto	= this._privHisto || new Uint8Array(analyser.frequencyBinCount);
+	// just an alias
+	var freqData	= this._privHisto;
+
+	// get the data
+	//analyser.getFloatFrequencyData(freqData)
+	analyser.getByteFrequencyData(freqData);
+	//analyser.getByteTimeDomainData(freqData)
+
+	/**
+	 * This should be in imageprocessing.js almost
+	*/
+	var makeHisto	= function(srcArr, dstLength){
+		var barW	= Math.floor(srcArr.length / dstLength);
+		var nBar	= Math.floor(srcArr.length / barW);
+		var arr		= []
+		for(var x = 0, arrIdx = 0; x < srcArr.length; arrIdx++){
+			var sum	= 0;
+			for(var i = 0; i < barW; i++, x++){
+				sum += srcArr[x];
+			}
+			var average	= sum/barW;
+			arr[arrIdx]	= average;
+		}
+		return arr;
+	}
+	// build the histo
+	var histo	= makeHisto(freqData, nBar);
+	// return it
+	return histo;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

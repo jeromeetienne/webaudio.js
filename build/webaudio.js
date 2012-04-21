@@ -477,6 +477,47 @@ WebAudio.Sound.prototype.tone	= function(hertz, seconds){
 }
 
 
+/**
+ * Put this function is .Sound with getByt as private callback
+*/
+WebAudio.Sound.prototype.makeHistogram	= function(nBar)
+{	
+	// get analyser node
+	var analyser	= this._analyser;
+	// allocate the private histo if needed - to avoid allocating at every frame
+	//this._privHisto	= this._privHisto || new Float32Array(analyser.frequencyBinCount);
+	this._privHisto	= this._privHisto || new Uint8Array(analyser.frequencyBinCount);
+	// just an alias
+	var freqData	= this._privHisto;
+
+	// get the data
+	//analyser.getFloatFrequencyData(freqData)
+	analyser.getByteFrequencyData(freqData);
+	//analyser.getByteTimeDomainData(freqData)
+
+	/**
+	 * This should be in imageprocessing.js almost
+	*/
+	var makeHisto	= function(srcArr, dstLength){
+		var barW	= Math.floor(srcArr.length / dstLength);
+		var nBar	= Math.floor(srcArr.length / barW);
+		var arr		= []
+		for(var x = 0, arrIdx = 0; x < srcArr.length; arrIdx++){
+			var sum	= 0;
+			for(var i = 0; i < barW; i++, x++){
+				sum += srcArr[x];
+			}
+			var average	= sum/barW;
+			arr[arrIdx]	= average;
+		}
+		return arr;
+	}
+	// build the histo
+	var histo	= makeHisto(freqData, nBar);
+	// return it
+	return histo;
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////

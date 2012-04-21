@@ -8,6 +8,11 @@
 <script src="../../src/webaudio.sound.js"></script>
 
 <script src="background.js"></script>
+
+<script src="socket.io/socket.io/socket.io.js"></script>
+<script src="socket.io/main.js"></script>
+
+
 <style>
 #background {
 	position	: absolute;
@@ -19,6 +24,7 @@
 </style>
 
 <body><script>
+	var captors	= {};
 	var world	= tQuery.createWorld().boilerplate().start();
 
 	world.renderer().setClearColorHex( 0x000000, 0 );
@@ -52,6 +58,7 @@
 		});
 		planet.object3d().addTo(world);
 		//planet.planet().useFileballMaterial(2);
+		captors['p1']	= planet;
 	}
 
 	// moon	
@@ -69,6 +76,7 @@
 			//planet.tick();
 		}, 500);
 		console.log("moon", planet.sound())
+		captors['p2']	= planet;
 		var moon = planet;
 		//planet.sound();
 	}
@@ -83,6 +91,7 @@
 			periodOrbit	: 3,
 			scale		: 0.2
 		});
+		captors['p3']	= planet;
 		planet.object3d().addTo(world);		
 	}
 	backgroundInit();
