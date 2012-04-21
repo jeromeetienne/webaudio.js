@@ -1,5 +1,7 @@
 <!doctype html><title>webaudio.js basic</title>
-<script src="../build/webaudio.js"></script>
+<script src="../src/webaudio.core.js"></script>
+<script src="../src/webaudio.nodechainbuilder.js"></script>
+<script src="../src/webaudio.sound.js"></script>
 <style>
 body {
 	margin	: 0px;
@@ -14,32 +16,42 @@ body {
 	document.body.appendChild(canvas)
 	var ctx		= canvas.getContext("2d");  
 
-	var freqByte	= new Uint8Array(canvas.width);
-
 	// init the library
 	var webaudio	= new WebAudio();
-	var update	= function(){
-		// get analyser node
-		var analyser	= sound.nodes().analyser;
-		// get the data
-		analyser.getByteFrequencyData(freqByte);
-		//analyser.getByteTimeDomainData(freqByte)
-		
+	/**
+	 * Put this function is .Sound with getByt as private callback
+	*/
+	var updateBar	= function(){
+
+		var nBar	= 40;
+		var histo	= sound.makeHistogram(nBar);
+
 		// clear the canvas
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		// draw canvas
 		ctx.fillStyle	= "rgb(200,0,0)";
-		for(var i = 0; i < canvas.width; i++){
-			var height	= freqByte[i] / 256 * canvas.height
-			ctx.fillRect(i, canvas.height-height, 1, height)  
+
+		drawHisto(canvas, histo);
+		return;
+
+		/**
+		 * This could be in image processing too
+		*/
+		function drawHisto(canvas, histo){
+			var nBar	= histo.length;
+			var barW	= Math.floor(canvas.width/nBar);
+			for(var i = 0; i < histo.length; i++){
+				var height	= Math.floor(histo[i]) / 256 * canvas.height;
+				ctx.fillRect(i*barW, canvas.height-height, barW, height) ;
+			}
 		}
 	};
 	// create a sound
 	var url		= 'sounds/techno.mp3';
-	//var url		= 'sounds/eatpill.mp3'
+	//var url		= 'sounds/perfume.mp3';
+	var url		= 'sounds/eatpill.mp3'
 	var sound	= webaudio.createSound().load(url, function(sound){
 		setInterval(function(){
-			update();
+			updateBar();
 		}, 1000/60);
 
 		sound.loop(true).play();
