@@ -1,8 +1,8 @@
 <!doctype html><title>webaudio example: histo2d</title>
 <script src="../build/webaudio.js"></script>
+<script src="vendor/tweeneasing.js"></script>
 <style>
 body {
-	background	: black;
 	margin		: 0;
 	overflow	: hidden;
 }
@@ -14,9 +14,8 @@ body {
 	var sound	= webaudio.createSound();
 	// load sound.wav and play it
 	sound.load('sounds/techno.mp3', function(sound){
-		sound.play();
+		sound.loop(true).play();
 	});
-	
 
 	// create and add the canvas
 	var canvas	= document.createElement('canvas');
@@ -24,4 +23,39 @@ body {
 	canvas.height	= window.innerHeight;
 	var ctx		= canvas.getContext("2d");  
 	document.body.appendChild(canvas)
+		
+
+	setInterval(update, 1000/60);
+	
+	function update(){
+		// neutral value
+		var min		= 0;
+		var max		= 1;
+		var offset	= 0;
+		var range	= 1;
+		var tweenFn	= TWEEN.Easing.Linear.None;
+		// normalization of the scale
+		var scale	= sound.amplitude();
+		// apply the formula
+		scale		= Math.min(scale, max);
+		scale		= Math.max(scale, min);
+		scale		-= min;
+		scale		/= max == min ? 1 : max - min;
+		scale		= tweenFn(scale);
+		scale		*= range;
+		scale		+= offset;
+
+		// clear the canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// up to you to find the colors you like
+		ctx.fillStyle	= "rgb("+Math.floor(1.3*scale*256)+", 0, 0);";
+		//ctx.fillStyle	= "rgb(250, 0, 0);";
+		// draw a circle
+		var radius	= 200+scale * 100;
+		ctx.beginPath();
+		ctx.arc(canvas.width/2, canvas.height/2, radius, 0, Math.PI*2, true); 
+		ctx.closePath();
+		ctx.fill();
+	}; 
+
 </script></body>
