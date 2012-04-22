@@ -1,4 +1,4 @@
-function backgroundInit(){
+function backgroundInit(sound){
 	var canvas	= document.createElement('canvas');
 	canvas.width	= window.innerWidth;
 	canvas.height	= window.innerHeight;
@@ -10,7 +10,8 @@ function backgroundInit(){
 	 * Put this function is .Sound with getByt as private callback
 	*/
 	var updateBar	= function(){
-
+		if( sound.isPlayable() === false )	return;
+		
 		var nBar	= 40;
 		var histo	= sound.makeHistogram(nBar);
 
@@ -34,14 +35,7 @@ function backgroundInit(){
 			}
 		}
 	};
-	// create a sound
-	//var url		= 'sounds/techno.mp3';
-	var url		= '../sounds/perfume.mp3';
-	//var url		= 'sounds/eatpill.mp3'
-	var sound	= webaudio.createSound().load(url, function(sound){
-		setInterval(function(){
-			updateBar();
-		}, 1000/60);
-		sound.loop(true).play();
-	});
+	setInterval(function(){
+		updateBar();
+	}, 1000/60);
 };

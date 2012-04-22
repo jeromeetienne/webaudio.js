@@ -10,14 +10,24 @@ tQuery.register('Planet', function(opts){
 	console.assert(opts.soundUrl);
 
 	this._world	= opts.world;
+
+	// material
+	if( hiGlEnable ){
+		var material	= new THREE.MeshPhongMaterial({
+			ambient	: 0xFFFFFF,
+			color	: 0x444444,
+			map	: THREE.ImageUtils.loadTexture(opts.textureUrl)
+		});
+	}else{
+		var material	= new THREE.MeshLambertMaterial({
+			ambient	: 0xFFFFFF,
+			color	: 0x444444,
+			map	: THREE.ImageUtils.loadTexture(opts.textureUrl)
+		});
+	}
+
 	// create a planet
-	this._planet	= tQuery.createSphere();
-	this._planet.material(new THREE.MeshLambertMaterial({
-	//this._planet.material(new THREE.MeshPhongMaterial({
-		ambient	: 0xFFFFFF,
-		color	: 0x444444,
-		map	: THREE.ImageUtils.loadTexture(opts.textureUrl)
-	})).addTo(world).scale(opts.scale);
+	this._planet	= tQuery.createSphere(material).addTo(world).scale(opts.scale);
 
 	// create a sound
 	var sound	= this._sound = webaudio.createSound();
@@ -31,7 +41,6 @@ tQuery.register('Planet', function(opts){
 	this._object	= tQuery.createObject3D();
 	this._object.add(this._planet);
 
-	
 	this._$update	= this._loopCb.bind(this);
 	this._world.loop().hook(this._$update);
 });
