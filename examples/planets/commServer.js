@@ -7,6 +7,7 @@ socket.on('handshake', function(data){
 });
 
 socket.on('pendulum', function (event) {
+	if( typeof(captors) === "undefined" )	return;
 	Object.keys(event).forEach(function(captor){
 		var value	= captors[captor];
 		console.log("captor", captor, "value", value);

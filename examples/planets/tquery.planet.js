@@ -53,7 +53,9 @@ tQuery.Planet.prototype.sound	= function(){
 /**
 */
 tQuery.Planet.prototype.tick	= function(){
-	this._sound.play();
+	if( this._sound.isPlayable() ){
+		this._sound.play();
+	}
 	return this;	// for chained API
 }
 

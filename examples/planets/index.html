@@ -1,19 +1,26 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="tquery-bundle.js"></script>
-<script src="tquery.planet.js"></script>
-<script src="fireball/tquery.fireballmaterial.js"></script>
+<script src="vendor/tquery-bundle.js"></script>
+<script src="vendor/fireball/tquery.fireballmaterial.js"></script>
 
-<script src="../../src/webaudio.core.js"></script>
+<!-- webaudio.js to play sound -->
+<script src="vendor/webaudio.js"></script>
+<!--<script src="../../src/webaudio.core.js"></script>
 <script src="../../src/webaudio.nodechainbuilder.js"></script>
 <script src="../../src/webaudio.sound.js"></script>
+-->
 
+<!-- main class to store planete -->
+<script src="tquery.planet.js"></script>
+
+<!-- to display the soundtrack frequency histogram in 2D canvas -->
 <script src="background.js"></script>
 
+<!-- communication with the server -->
 <script src="vendor/socket.io/socket.io.js"></script>
 <script src="commServer.js"></script>
 
+<!-- camera controls -->
 <script src="cameracontrols.js"></script>
-
 
 <style>
 #background {
@@ -26,8 +33,11 @@
 </style>
 
 <body><script>
-	//var audioEnable	= WebAudio.isAvailable;
-	//var webGlEnable	= tQuery.World.hasWebGL();
+	// some global
+	var audioEnable	= WebAudio.isAvailable;
+	var webGlEnable	= tQuery.World.hasWebGL();
+	var trackEnable	= false;
+	var bgEnable	= false;
 	var captors	= {};
 
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -100,6 +110,7 @@
 		captors['p3']	= planet;
 		planet.object3d().addTo(world);		
 	}
+
 	backgroundInit();
 
 </script></body>
