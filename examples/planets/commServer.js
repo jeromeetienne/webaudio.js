@@ -11,7 +11,6 @@ socket.on('pendulum', function (event) {
 		var value	= captors[captor];
 		console.log("captor", captor, "value", value);
 		var object	= captors[captor];
-		console.log("object", object);
 		object && object.tick();
 	})
 });

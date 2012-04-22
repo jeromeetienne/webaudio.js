@@ -9,8 +9,10 @@
 
 <script src="background.js"></script>
 
-<script src="socket.io/socket.io/socket.io.js"></script>
-<script src="socket.io/main.js"></script>
+<script src="vendor/socket.io/socket.io.js"></script>
+<script src="commServer.js"></script>
+
+<script src="cameracontrols.js"></script>
 
 
 <style>
@@ -24,10 +26,14 @@
 </style>
 
 <body><script>
+	//var audioEnable	= WebAudio.isAvailable;
+	//var webGlEnable	= tQuery.World.hasWebGL();
 	var captors	= {};
-	var world	= tQuery.createWorld().boilerplate().start();
 
+	var world	= tQuery.createWorld().boilerplate().start();
 	world.renderer().setClearColorHex( 0x000000, 0 );
+
+	initCameraControls(world);
 
 	// init the library
 	var webaudio	= new WebAudio();
@@ -43,16 +49,14 @@
 	tQuery(tLight).addTo(world);
 
 
-	// create a planet
-	var url		= 'images/moon_1024.jpg';
-	var url		= 'images/mercurymap.jpg';
-	var url		= 'images/sunmap.jpg';
+	// create planets
 
 	// sun
 	if( true ){
 		var planet	= new tQuery.Planet({
 			textureUrl	: 'images/sunmap.jpg',
 			soundUrl	: '../sounds/eatpill.mp3',
+			soundUrl	: '../sounds/Kit3/kick.wav',
 			radiusOrbit	: 0,
 			periodOrbit	: 1
 		});
@@ -67,13 +71,14 @@
 			textureUrl	: 'images/moon_1024.jpg',
 			//textureUrl	: 'images/earth_atmos_2048.jpg',
 			soundUrl	: '../sounds/eatpill.mp3',
+			soundUrl	: '../sounds/Kit3/hihat.wav',
 			radiusOrbit	: 1,
 			periodOrbit	: 2,
 			axialTilt	: -23*Math.PI/180
 		});
 		planet.object3d().addTo(world);
 		setInterval(function(){
-			//planet.tick();
+			planet.tick();
 		}, 500);
 		console.log("moon", planet.sound())
 		captors['p2']	= planet;
@@ -87,6 +92,7 @@
 		var planet	= new tQuery.Planet({
 			textureUrl	: 'images/mercurymap.jpg',
 			soundUrl	: '../sounds/eatpill.mp3',
+			soundUrl	: '../sounds/Kit3/snare.wav',
 			radiusOrbit	: 2,
 			periodOrbit	: 3,
 			scale		: 0.2
