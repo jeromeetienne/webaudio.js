@@ -1,0 +1,27 @@
+<!doctype html><title>webaudio example: histo2d</title>
+<script src="../build/webaudio.js"></script>
+<style>
+body {
+	background	: black;
+	margin		: 0;
+	overflow	: hidden;
+}
+</style>
+<body><script>
+	// init the library
+	var webaudio	= new WebAudio();
+	// create a sound
+	var sound	= webaudio.createSound();
+	// load sound.wav and play it
+	sound.load('sounds/techno.mp3', function(sound){
+		sound.play();
+	});
+	
+
+	// create and add the canvas
+	var canvas	= document.createElement('canvas');
+	canvas.width	= window.innerWidth;
+	canvas.height	= window.innerHeight;
+	var ctx		= canvas.getContext("2d");  
+	document.body.appendChild(canvas)
+</script></body>
