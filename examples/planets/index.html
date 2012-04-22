@@ -36,7 +36,12 @@
 	var captors	= {};
 	var soundtrack	= null;
 
-	var world	= tQuery.createWorld().boilerplate().start();
+	try {
+		var world	= tQuery.createWorld().boilerplate();		
+	}catch(e){
+		console.log("Error", e)
+	}
+	world.start();
 	world.renderer().setClearColorHex( 0x000000, 0 );
 
 	initCameraControls(world);
