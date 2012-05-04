@@ -1,0 +1,36 @@
+<!doctype html><title>using jsfx.js and webaudio.js</title>
+<!-- include webaudio.js  -->
+<script src="../../build/webaudio.js"></script>
+<!-- include the .js files for jsfx.js -->
+<script src="vendor/audio.js"></script>
+<script src="vendor/jsfx.js"></script>
+<script src="vendor/jsfxlib.js"></script>
+<!-- Now lets start -->
+<body><script>
+	// [jsfx.js](http://www.egonelbre.com/js/jsfx/) is a "Javascript Sound Effect Generator" library
+	// We gonna use it to generate sound for WebAudio.js.
+	// It allows to avoid downloading sounds.
+	
+	// init the library
+	var webaudio	= new WebAudio();
+	// create a sound 
+	var sound	= webaudio.createSound();
+	// create a sound
+
+	// generate the data with jsfx
+	// tune your own [here](http://egonelbre.com/js/jsfx/)
+	var lib		= ["saw",0.0000,0.4000,0.0000,0.1640,0.0000,0.1880,20.0000,594.0000,2400.0000,0.5440,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.5616,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+	var params	= jsfxlib.arrayToParams(lib);
+	var data	= jsfx.generate(params);
+	
+	// BUG which param do i put here ?
+	var buffer	= webaudio.context().createBuffer(1, 22100, 22100*2);
+	var fArray	= buffer.getChannelData(0);
+	for(var i = 0; i < fArray.length; i++){
+		fArray[i]	= data[i];
+	}
+	// set the buffer
+	sound.buffer(buffer);
+	// play the sound
+	sound.play();	
+</script></body>
