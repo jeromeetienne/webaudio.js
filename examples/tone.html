@@ -9,15 +9,6 @@
 	var webaudio	= new WebAudio();
 	// create a sound 
 	var sound	= webaudio.createSound();
-
-	
-	//var buffer	= generateSin(200, 2);
-	//console.log("buffer", buffer);
-	//sound.buffer(buffer).loop(true).play();
-	sound.tone(350, 4).loop(true).volume(30);
-	sound.play();
-	// load sound.wav and play it
-	//sound.load('sounds/techno.mp3', function(sound){
-	//	//sound.play();
-	//});
+	// set a tone and play it
+	sound.tone(350, 2).loop(true).play();
 </script></body>
