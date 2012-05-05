@@ -2,9 +2,10 @@
 <!-- include webaudio.js  -->
 <script src="../../build/webaudio.js"></script>
 <!-- include the .js files for jsfx.js -->
-<script src="vendor/audio.js"></script>
-<script src="vendor/jsfx.js"></script>
-<script src="vendor/jsfxlib.js"></script>
+<!-- include the .js files for jsfx.js -->
+<script src="../vendor/jsfx/audio.js"></script>
+<script src="../vendor/jsfx/jsfx.js"></script>
+<script src="../vendor/jsfx/jsfxlib.js"></script>
 <!-- Now lets start -->
 <body><script>
 	// [jsfx.js](http://www.egonelbre.com/js/jsfx/) is a "Javascript Sound Effect Generator" library
@@ -17,7 +18,6 @@
 	var webaudio	= new WebAudio();
 	// create a sound 
 	var sound	= webaudio.createSound();
-	// create a sound
 
 	// generate the data with jsfx
 	// tune your own [here](http://egonelbre.com/js/jsfx/)
@@ -34,5 +34,6 @@
 	// set the buffer
 	sound.buffer(buffer);
 	// play the sound
-	sound.play();	
-</script></body>
+	sound.play();
+</script>
+</body>

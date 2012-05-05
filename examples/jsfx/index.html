@@ -1,0 +1,52 @@
+<!doctype html><title>using jsfx.js and webaudio.js</title>
+<!-- include webaudio.js  -->
+<script src="../../build/webaudio.js"></script>
+<!-- include webaudio.sound.jsfx.js. We made a   -->
+<script src="webaudio.sound.jsfx.js"></script>
+<!-- include the .js files for jsfx.js -->
+<script src="../vendor/jsfx/audio.js"></script>
+<script src="../vendor/jsfx/jsfx.js"></script>
+<script src="../vendor/jsfx/jsfxlib.js"></script>
+<!-- Now lets start -->
+<body><script>
+	// [jsfx.js](https://github.com/egonelbre/jsfx) is a "Javascript Sound Effect Generator" library
+	// We gonna use it to generate sound for WebAudio.js.
+	// It allows to avoid downloading sounds, so gain bandwidth on the server, and
+	// reduce latency for the users.
+	// It seems to provide sounds like 8bit consoles tho :)
+	// It got a nice [editor](http://www.egonelbre.com/js/jsfx/) to rapidely invent
+	// new sounds.
+
+	// init webaudio.js library
+	var webaudio	= new WebAudio();
+
+	// Here you get the parameters for jsfx.js. They are passed directly to jsfx.js.
+	// you can generate them with this [editor](http://www.egonelbre.com/js/jsfx/)
+	var lib		= ["saw",0.0000,0.4000,0.0000,0.1640,0.0000,0.1880,20.0000,594.0000,2400.0000,0.5440,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.5616,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+	// here you create a sound with webaudio.js and generate it with jsfx.js
+	// after that ```boing``` is a ```WebAudio.Sound``` so you can play it
+	// and do many other things allow by the
+	// [Web Audio API](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html).
+	// We did a short plugin for that ```webaudio.sound.jsfx.js``` 
+	var boing	= webaudio.createSound().generateWithJsfx(lib);
+
+	// Here we create another sound. Once again generater by jsfx.js editor	
+	var lib		= ["square",0.0000,0.4000,0.0000,0.3560,0.0000,0.1900,20.0000,358.0000,2400.0000,0.3000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.1810,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+	var jump	= webaudio.createSound().generateWithJsfx(lib);
+
+	// here we play the sound.
+	boing.play();
+	jump.play();
+
+	// as ```boing``` and ```jump``` are declared here, you can open the js-console
+	// of your browser, and type ```jump.play()```. Try it! It will work and play
+	// the sound. This is nice way to experiment and try the various possibilities
+	// of webaudio.js library.
+	console.log("try to type 'boing.play()' in the console.");
+	console.log("or 'sound = jump.loop(true).play()'");
+	console.log("then 'sound.stop()'");
+	
+	// if you feel like it, a good exercice would be to do a plugin on
+	// the random generator in the [editor](http://www.egonelbre.com/js/jsfx/).
+	// It is in [jsfxgui.js](https://github.com/egonelbre/jsfx/blob/master/lib/jsfxgui.js)
+</script></body>
