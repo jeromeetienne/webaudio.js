@@ -54,6 +54,9 @@
 	tQuery.createDirectionalLight().addTo(world).position(1,1,0.5).color(0xFF88CC).intensity(4);
 	tQuery.createDirectionalLight().addTo(world).position(-1,-1,0.2).color(0x4488CC).intensity(4);
 
+
+	// # Some constants
+	
 	// build histogram with tquery
 	var nBar	= 41;
 	// this number MUST be odd
@@ -63,16 +66,25 @@
 	var bars3d	= [];
 	// compute the bar width	
 	var barW	= 80/nBar;
+
+	// # Create the 3D
+
 	// create the container group3D which gonna regroup all the bar3D
 	var group3d	= tQuery.createObject3D().scale(1/20).addTo(world);
-	// build each bar and add it to ```group3d```
+	// We gonna build each bar and add it to ```group3d```.
+	// We loop to create ```nBar``` with ```tQuery.createCube()```. In fact a bar
+	// is a rectangular box, so like a cube with different dimensions.
+	// a bar got a width of ```barW```, an height of 10 and a depth of 5.
+	// The material is a simple [lambert](http://en.wikipedia.org/wiki/Lambertian_reflection).
+	// Once the bar is create, we add it to ```group3d``` and set it to the correct
+	// position in space.
+	// We push every bar3d into ```bars3d``` for future reference.
 	for(var i = 0; i < nBar; i++){
-		var material	= new THREE.MeshLambertMaterial({
+		var bar3d	= tQuery.createCube(barW, 10, 5, new THREE.MeshLambertMaterial({
 			ambient	: 0x888888,
 			color	: 0xFFFFFF
-		});
-		var bar3d	= tQuery.createCube(barW, 10, 5, material).addTo(group3d);
-		bar3d.position((i-nBar/2)*barW, 0, 0);
+		}))
+		bar3d.addTo(group3d).position((i-nBar/2)*barW, 0, 0);
 		bars3d.push(bar3d)
 	}
 	
