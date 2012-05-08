@@ -44,28 +44,37 @@
 
 	// # Init the 3D
 	
-	// First we gonna init our tQuery world.
+	// First we initialize the world in 3D.
+	// With ```tQuery.createWorld()```, we create a ```tQuery.World```.
+	// With ```.boilerplate()```, we setup a boilerplate on this world. A boilerplate is
+	// a fast way to get you started on the right foot. It is the [learningthreejs
+	// boilerplate for three.js](http://learningthreejs.com/blog/2011/12/20/boilerplate-for-three-js/)
+	// With ```.start()```, we start the rendering loop. So from now on, the world scene
+	// gonna be rendered periodically, typically 60time per seconds.
 	var world	= tQuery.createWorld().boilerplate().start();
 	
-	// the background color is set to ```0x000000```, aka black
-	world.renderer().setClearColorHex( 0x000000, 1 );
+	// We Change the background color. This confusing line ensure the background of the
+	// 3D scene will be rendered as ```0x000000``` color, aka black.
+	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
 
-	// add lights
-	tQuery.createDirectionalLight().addTo(world).position(1,1,0.5).color(0xFF88CC).intensity(4);
-	tQuery.createDirectionalLight().addTo(world).position(-1,-1,0.2).color(0x4488CC).intensity(4);
-
+	// Here we setup the lights of our scene. This is a key factor for the look and feel
+	// of your scene. We add a ambient light and 2 directional lights.
+	tQuery.createAmbientLight().addTo(world).color(0x888888);
+	tQuery.createDirectionalLight().addTo(world).position(+1,+1,1).color(0x88FF88);
+	tQuery.createDirectionalLight().addTo(world).position(-1,-1, 1).color(0x8888FF);
 
 	// # Some constants
 	
-	// build histogram with tquery
+	// First we initialize ```nBar``` to store number of bars in our 3D vuemeter.
+	// This number MUST be odd, thus the vuemeter is symteric with the middle
 	var nBar	= 41;
-	// this number MUST be odd
-	console.assert(nBar%2)
-	var nBarHalf	= Math.ceil(nBar/2)
-	// to store the object3D for all bars of the  histogram
-	var bars3d	= [];
-	// compute the bar width	
+	console.assert(nBar%2, "nBar MUST be a odd number.")
+	// Now we need to compute the width of each 3D bar. The whole vuemeter is
+	// 80 wide. So each bar is ```80/nBar``` wide.
 	var barW	= 80/nBar;
+	// We create an array ```bars3d```. We will use it to store the object3D
+	// for all bars of the  histogram.
+	var bars3d	= [];
 
 	// # Create the 3D
 
@@ -83,9 +92,9 @@
 		var bar3d	= tQuery.createCube(barW, 10, 5, new THREE.MeshLambertMaterial({
 			ambient	: 0x888888,
 			color	: 0xFFFFFF
-		}))
+		}));
 		bar3d.addTo(group3d).position((i-nBar/2)*barW, 0, 0);
-		bars3d.push(bar3d)
+		bars3d.push(bar3d);
 	}
 	
 	// # Update Vuemeter
@@ -98,6 +107,7 @@
 		// build the histogram of the sound based on
 		// [RealtimeAnalyserNode](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html#RealtimeAnalyserNode)
 		// ```.getByteFrequencyData()```
+		var nBarHalf	= Math.ceil(nBar/2)
 		var histo	= sound.makeHistogram(nBarHalf);
 		// We gonna loop over each bar3D of our vuemeter. We gonna update
 		// each of them based on the sound histogram we just computed.
@@ -117,5 +127,5 @@
 			bar3d.get(0).scale.y	= height*3;
 			bar3d.get(0).material.color.setHSV(0.3+height*0.7,1,1)
 		});
-	})
+	});
 </script></body>
