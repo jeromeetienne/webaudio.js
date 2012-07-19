@@ -8,12 +8,6 @@
 <script src="../vendor/jsfx/jsfxlib.js"></script>
 <!-- Now lets start -->
 <body><script>
-	// [jsfx.js](http://www.egonelbre.com/js/jsfx/) is a "Javascript Sound Effect Generator" library
-	// We gonna use it to generate sound for WebAudio.js.
-	// It allows to avoid downloading sounds.
-	
-	// **TODO** should i make that a webaudio.js plugin
-	
 	// init the library
 	var webaudio	= new WebAudio();
 	// create a sound 
@@ -21,7 +15,9 @@
 
 	// generate the data with jsfx
 	// tune your own [here](http://egonelbre.com/js/jsfx/)
-	var lib		= ["saw",0.0000,0.4000,0.0000,0.1640,0.0000,0.1880,20.0000,594.0000,2400.0000,0.5440,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.5616,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+	var lib		= ["noise",0.0000,0.4000,0.0000,0.1780,0.5550,0.1420,20.0000,100.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.7024,0.2980,-0.2220,1.0000,0.0000,0.0000,0.0000,0.0000];
+	var lib		= ["noise",0.0000,0.4000,0.0000,0.1000,0.7980,0.1820,20.0000,1225.0000,2400.0000,-0.2760,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+	var lib		= ["noise",0.0000,0.4000,0.0000,0.1180,0.5820,0.1840,20.0000,153.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
 	var params	= jsfxlib.arrayToParams(lib);
 	var data	= jsfx.generate(params);
 	
@@ -33,6 +29,7 @@
 	}
 	// set the buffer
 	sound.buffer(buffer);
+	sound.loop(true);
 	// play the sound
 	sound.play();
 </script>
