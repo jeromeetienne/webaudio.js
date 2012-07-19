@@ -14,26 +14,7 @@
 	//var buffer	= generateSin(200, 2);
 	//console.log("buffer", buffer);
 	//sound.buffer(buffer).loop(true).play();
-	//sound.tone(350, 4).loop(true).volume(0.9);
+	sound.tone(350, 4).loop(true).volume(0.9);
 	//var playingSound= sound.play();
-	// load sound.wav and play it
-	//sound.load('sounds/techno.mp3', function(sound){
-	//	//sound.play();
-	//});
 
-	// load sound.wav and play it
-	var playingSound;
-	var engine	= webaudio.createSound();
-	engine.load('sounds/triggerrally/engine1.wav', function(sound){
-		playingSound	= sound.loop(true).play();
-	});
-
-
-	document.addEventListener('mousemove', function(event){
-		// get mouse coordinate in [-1, +1]
-		var mouseX	= (event.clientX / window.innerWidth )*2 - 1;
-		var mouseY	= (event.clientY / window.innerHeight)*2 - 1;
-
-		playingSound.node.playbackRate.value = mouseX+1;
-	})
 </script></body>

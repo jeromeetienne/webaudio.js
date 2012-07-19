@@ -1,0 +1,23 @@
+<!doctype html><title>webaudio.js basic</title>
+<script src="../build/webaudio.js"></script>
+<body><script>
+	// init the library
+	var webaudio	= new WebAudio();
+
+	// load sound and play it
+	var playingSound;
+	var engine	= webaudio.createSound();
+	engine.load('sounds/triggerrally/engine1.wav', function(sound){
+		playingSound	= sound.loop(true).play();
+	});
+
+	// bind the mouse position to the sound
+	document.addEventListener('mousemove', function(event){
+		// get mouse coordinate in [0, +1]
+		var mouseX	= event.clientX / window.innerWidth ;
+		var mouseY	= event.clientY / window.innerHeight;
+
+		playingSound.node.playbackRate.value	= mouseX*2;
+		playingSound.node.gain.value		= mouseY*2;
+	})
+</script></body>

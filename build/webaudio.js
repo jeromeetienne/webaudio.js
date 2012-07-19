@@ -472,7 +472,7 @@ WebAudio.Sound.prototype.tone	= function(hertz, seconds){
 		fArray[i]	= Math.sin(angle)*amplitude;
 	}
 	// set the buffer
-	this.buffer(buffer).loop(true);
+	this.buffer(buffer);
 	return this;	// for chained API
 }
 
