@@ -1,6 +1,7 @@
 <!doctype html><title>webaudio.js basic</title>
 <script src="../build/webaudio.js"></script>
-<body><script>
+<body><div id='info'></div>
+<script>
 	// init the library
 	var webaudio	= new WebAudio();
 
@@ -19,5 +20,10 @@
 
 		playingSound.node.playbackRate.value	= mouseX*2;
 		playingSound.node.gain.value		= mouseY*2;
+
+		document.getElementById('info').innerHTML	= 
+			'playbackRate: ' + playingSound.node.playbackRate.value + 
+			'<br/>' +
+			'gain: ' + playingSound.node.gain.value;
 	})
 </script></body>
