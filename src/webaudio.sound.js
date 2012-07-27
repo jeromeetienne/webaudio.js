@@ -220,7 +220,7 @@ WebAudio.Sound.prototype.tone	= function(hertz, seconds){
 	// create the buffer
 	var buffer	= webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
 	var fArray	= buffer.getChannelData(0);
-	// filli the buffer
+	// fill the buffer
 	for(var i = 0; i < fArray.length; i++){
 		var time	= i / buffer.sampleRate;
 		var angle	= hertz * time * Math.PI;
