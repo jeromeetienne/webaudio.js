@@ -2,7 +2,6 @@
 <!-- include webaudio.js  -->
 <script src="../../build/webaudio.js"></script>
 <!-- include the .js files for jsfx.js -->
-<!-- include the .js files for jsfx.js -->
 <script src="../vendor/jsfx/audio.js"></script>
 <script src="../vendor/jsfx/jsfx.js"></script>
 <script src="../vendor/jsfx/jsfxlib.js"></script>
@@ -21,8 +20,7 @@
 	var params	= jsfxlib.arrayToParams(lib);
 	var data	= jsfx.generate(params);
 	
-	// BUG which param do i put here ?
-	var buffer	= webaudio.context().createBuffer(1, 22100, 22100*2);
+	var buffer	= webaudio.context().createBuffer(1, data.length, 44100);
 	var fArray	= buffer.getChannelData(0);
 	for(var i = 0; i < fArray.length; i++){
 		fArray[i]	= data[i];
