@@ -130,7 +130,7 @@ WebAudio.prototype.volume	= function(value){
 };
 
 /** 
- * gett/setter for mute
+ * getter/setter for mute
 */
 WebAudio.prototype.mute	= function(value){
 	if( value === undefined )	return this._muted;
@@ -139,6 +139,9 @@ WebAudio.prototype.mute	= function(value){
 	return this;	// for chained API
 }
 
+/**
+ * to toggle the mute
+*/
 WebAudio.prototype.toggleMute	= function(){
 	if( this.mute() )	this.mute(false);
 	else			this.mute(true);
