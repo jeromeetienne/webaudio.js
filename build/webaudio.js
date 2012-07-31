@@ -48,6 +48,10 @@ WebAudio	= function(){
 	// create the context
 	this._ctx	= new webkitAudioContext();
 
+	// setup internal variable
+	this._muted	= false;
+	this._volume	= 1;
+	
 	// setup the end of the node chain
 	// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ 
 	this._gainNode	= this._ctx.createGainNode();
@@ -115,11 +119,29 @@ WebAudio.prototype._entryNode	= function(){
  * getter/setter on the volume
 */
 WebAudio.prototype.volume	= function(value){
-	if( value === undefined )	return this._gainNode.gain.value;
-	this._gainNode.gain.value	= value;
+	if( value === undefined )	return this._volume;
+	// update volume
+	this._volume	= true;
+	// update actual volume IIF not muted
+	if( this._muted  === false )	this._gainNode.gain.value	= value;
+	// return this for chained API
 	return this;
 };
 
+/** 
+ * gett/setter for mute
+*/
+WebAudio.prototype.mute	= function(value){
+	if( value === undefined )	return this._muted;
+	this._muted	= value;
+	this._gainNode.gain.value	= this._muted ? 0 : this._volume;
+	return this;	// for chained API
+}
+
+WebAudio.prototype.toggleMute	= function(){
+	if( this.mute() )	this.mute(false);
+	else			this.mute(true);
+}
 /**
  * Constructor
  *
@@ -465,7 +487,7 @@ WebAudio.Sound.prototype.tone	= function(hertz, seconds){
 	// create the buffer
 	var buffer	= webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
 	var fArray	= buffer.getChannelData(0);
-	// filli the buffer
+	// fill the buffer
 	for(var i = 0; i < fArray.length; i++){
 		var time	= i / buffer.sampleRate;
 		var angle	= hertz * time * Math.PI;

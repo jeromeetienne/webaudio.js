@@ -7,6 +7,6 @@
 	var sound	= webaudio.createSound();
 	// load sound.wav and play it
 	sound.load('sounds/techno.mp3', function(sound){
-		sound.play();
+		sound.loop(true).play();
 	});
 </script></body>

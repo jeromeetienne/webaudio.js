@@ -4,7 +4,8 @@
 <script src="vendor/jsfx/audio.js"></script>
 <script src="vendor/jsfx/jsfx.js"></script>
 <script src="vendor/jsfx/jsfxlib.js"></script>
-<body><script>
+<body><div id='info'></div>
+<script>
 	// init the library
 	var webaudio	= new WebAudio();
 	// create a sound 
@@ -20,7 +21,7 @@
 	var buffer	= webaudio.context().createBuffer(1, 44100, 44100);
 	var fArray	= buffer.getChannelData(0);
 	for(var i = 0; i < fArray.length; i++){
-		fArray[i]	= Math.random()*2;
+		fArray[i]	= (Math.random()-0.5)*2;
 	}
 	// set the buffer
 	sound.buffer(buffer);
@@ -34,7 +35,12 @@
 		var mouseX	= event.clientX / window.innerWidth ;
 		var mouseY	= event.clientY / window.innerHeight;
 
-		playingSound.node.playbackRate.value	= mouseX;
+		playingSound.node.playbackRate.value	= mouseX*2;
 		playingSound.node.gain.value		= mouseY/4;
+
+		document.getElementById('info').innerHTML	= 
+			'playbackRate: ' + playingSound.node.playbackRate.value + 
+			'<br/>' +
+			'gain: ' + playingSound.node.gain.value;
 	})
 </script></body>
