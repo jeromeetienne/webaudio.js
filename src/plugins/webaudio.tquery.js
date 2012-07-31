@@ -49,7 +49,7 @@ tQuery.register('createSound', function(world, nodeChain){
 
 WebAudio.fn.followListener	= function(world){
 	this._$followListenerCb	= function(deltaTime){
-		this._followListenerCb(world.camera(), deltaTime);
+		this._followListenerCb(world.tCamera(), deltaTime);
 	}.bind(this);
 	world.loop().hook(this._$followListenerCb);
 }
