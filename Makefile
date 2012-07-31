@@ -27,7 +27,7 @@ docs:
 #		Build								#
 #################################################################################
 
-build:	buildCore minifyCore buildBundle minifyBundle
+build: minifyCore minifyBundle
 
 buildCore:
 	echo 				 	 > build/webaudio.js
@@ -36,7 +36,7 @@ buildCore:
 	cat src/webaudio.sound.js		>> build/webaudio.js
 	cat src/webaudio.loader.js		>> build/webaudio.js
 
-buildBundle: buildLib
+buildBundle: buildCore
 	echo 			 > build/webaudio-bundle.js
 	cat build/webaudio.js	>> build/webaudio-bundle.js
 	cat src/plugins/*.js	>> build/webaudio-bundle.js
@@ -48,7 +48,7 @@ minifyCore:
 		>> build/webaudio.min.js
 	@echo size minified + gzip is `gzip -c build/webaudio.min.js | wc -c` byte
 
-minifyBundle:
+minifyBundle: buildBundle
 	curl --data-urlencode "js_code@build/webaudio-bundle.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile		\

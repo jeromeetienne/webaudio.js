@@ -121,9 +121,11 @@ WebAudio.prototype._entryNode	= function(){
 WebAudio.prototype.volume	= function(value){
 	if( value === undefined )	return this._volume;
 	// update volume
-	this._volume	= true;
+	this._volume	= value;
 	// update actual volume IIF not muted
-	if( this._muted  === false )	this._gainNode.gain.value	= value;
+	if( this._muted  === false ){
+		this._gainNode.gain.value	= this._volume;	
+	}
 	// return this for chained API
 	return this;
 };
