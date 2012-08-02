@@ -11,23 +11,23 @@
 	});
 	
 	// bind the visibility
-	var visibilitychangeStr	= (document.visibilitychange !== undefined ? 'visibilitychange' :
-		(document.mozHidden	!== undefined ? 'mozvisibilitychange' :
-		(document.msHidden	!== undefined ? 'msvisibilitychange' :
-		(document.webkitHidden	!== undefined ? 'webkitvisibilitychange' :
-		console.assert(false, "Page Visibility API unsupported")
-	))))
-	document.addEventListener(visibilitychangeStr, function(){
-		var hidden	= (document.hidden !== undefined ? 'hidden' :
-			(document.mozHidden	!== undefined ? 'mozHidden' :
-			(document.msHidden	!== undefined ? 'msHidden' :
-			(document.webkitHidden	!== undefined ? 'webkitHidden' :
-			console.assert(false, "Page Visibility API unsupported")
-		))))
-		if (document[hidden]) {
-			webaudio.mute(true);
-		} else {
-			webaudio.mute(false);
-		}
-	}, false);
+	// var eventStr	= (document.hidden !== undefined	? 'visibilitychange'	:
+	// 	(document.mozHidden	!== undefined		? 'mozvisibilitychange'	:
+	// 	(document.msHidden	!== undefined		? 'msvisibilitychange'	:
+	// 	(document.webkitHidden	!== undefined		? 'webkitvisibilitychange' :
+	// 	console.assert(false, "Page Visibility API unsupported")
+	// ))))
+	// document.addEventListener(eventStr, function(){
+	// 	var propertyStr	= (document.hidden !== undefined ? 'hidden' :
+	// 		(document.mozHidden	!== undefined ? 'mozHidden' :
+	// 		(document.msHidden	!== undefined ? 'msHidden' :
+	// 		(document.webkitHidden	!== undefined ? 'webkitHidden' :
+	// 		console.assert(false, "Page Visibility API unsupported")
+	// 	))))
+	// 	if (document[propertyStr]) {
+	// 		webaudio.mute(true);
+	// 	} else {
+	// 		webaudio.mute(false);
+	// 	}
+	// }, false);
 </script></body>
