@@ -89,6 +89,18 @@ WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 };
 
 /**
+ * add a createMediaStreamSource
+ *
+ * @param {Object} [properties] properties to set in the created node
+*/
+WebAudio.NodeChainBuilder.prototype.mediaStreamSource	= function(stream, properties){
+//	console.assert( stream instanceof LocalMediaStream )
+	var node		= this._context.createMediaStreamSource(stream)
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+/**
  * add a panner
  * 
  * @param {Object} [properties] properties to set in the created node

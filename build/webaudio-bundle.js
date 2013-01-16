@@ -279,6 +279,18 @@ WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 };
 
 /**
+ * add a createMediaStreamSource
+ *
+ * @param {Object} [properties] properties to set in the created node
+*/
+WebAudio.NodeChainBuilder.prototype.mediaStreamSource	= function(stream, properties){
+//	console.assert( stream instanceof LocalMediaStream )
+	var node		= this._context.createMediaStreamSource(stream)
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+/**
  * add a panner
  * 
  * @param {Object} [properties] properties to set in the created node
@@ -333,7 +345,6 @@ WebAudio.Sound	= function(webaudio, nodeChain){
 	// setup this._chain
 	console.assert( nodeChain instanceof WebAudio.NodeChainBuilder );
 	this._chain	= nodeChain;
-
 	// connect this._chain.last() node to this._webaudio._entryNode()
 	this._chain.last().connect( this._webaudio._entryNode() );
 	
@@ -757,7 +768,7 @@ WebAudio.Sound.prototype.isFollowing	= function(){
 /**
  * @fileoverview WebAudio.js plugin for tQuery
 */
-tQuery.World.register('enableWebAudio', function(){
+tQuery.World.registerInstance('enableWebAudio', function(){
 	// sanity check
 	console.assert( this.hasWebAudio() === false, "there is already a webaudio" );
 	// intenciate a tQuery.World.WebAudio
@@ -771,7 +782,7 @@ tQuery.World.register('enableWebAudio', function(){
 	return this;
 });
 
-tQuery.World.register('disabledWebAudio', function(){
+tQuery.World.registerInstance('disabledWebAudio', function(){
 	if( this.hasWebAudio() === false )	return this;
 	var webaudio	= tQuery.data(this, "webaudio");
 	webaudio.destroy();
@@ -779,21 +790,21 @@ tQuery.World.register('disabledWebAudio', function(){
 	return this;	// for chained API
 });
 
-tQuery.World.register('getWebAudio', function(){
+tQuery.World.registerInstance('getWebAudio', function(){
 	var webaudio	= tQuery.data(this, "webaudio");
 	return webaudio;
 });
 
-tQuery.World.register('hasWebAudio', function(){
+tQuery.World.registerInstance('hasWebAudio', function(){
 	var webaudio	= tQuery.data(this, "webaudio");
 	return webaudio ? true : false;
 });
 
-tQuery.World.register('supportWebAudio', function(){
+tQuery.World.registerInstance('supportWebAudio', function(){
 	return WebAudio.isAvailable;
 });
 
-tQuery.register('createSound', function(world, nodeChain){
+tQuery.registerStatic('createSound', function(world, nodeChain){
 	world	= world || tQuery.world;
 	return new WebAudio.Sound(world.getWebAudio(), nodeChain);
 });

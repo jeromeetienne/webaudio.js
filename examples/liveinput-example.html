@@ -1,5 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="vendor/tquery/tquery-bundle-require.js"></script>
+<script src="vendor/tquery/tquery-bundle.js"></script>
+<script src="vendor/tquery/tquery.norequirejs.js"></script>
 
 <script src="../src/webaudio.core.js"></script>
 <script src="../src/webaudio.nodechainbuilder.js"></script>
@@ -15,20 +16,19 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
-//	world.removeCameraControls();
+	world.removeCameraControls();
 	world.enableWebAudio();
 
 	var object3d	= tQuery.createTorus().addTo(world);
 	tQuery.createAxis().addTo(object3d);
 
-	var sound	= tQuery.createSound().load('sounds/techno.mp3', function(sound){
-		//sound.nodes().bufferSource.loop	= true;
-		//sound.volume(1);
-		sound.loop(true);
-		var source	= sound.play();
-		setTimeout(function(){
-			//source.stop();
-		}, 200)
+	navigator.webkitGetUserMedia( {audio:true}, function (stream) {
+		var context	= world.getWebAudio().context();
+		var nodesChain	= new WebAudio.NodeChainBuilder(context)
+			.mediaStreamSource(stream)
+			.gainNode().analyser().panner()
+			
+		var sound	= tQuery.createSound(world, nodesChain);
+		sound.follow(object3d, world);
 	});
-	sound.follow(object3d, world);
 </script></body>

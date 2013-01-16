@@ -1,0 +1,79 @@
+<!-- # a 3D vuemeter in Real Time -->
+<!-- This example will show you how to create a 3D vuemetter with Web Audio API. -->
+<!-- We use [webaudio.js](https://github.com/jeromeetienne/webaudio.js), a web audio library -->
+<!-- for game. It is build on top of Web Audio API.
+<!-- I recently did a presentation at [musichackparis](http://www.musichackparis.org) on Web Audio API. -->
+<!-- Slides are [here](http://jeromeetienne.github.com/slides/webaudioapi). -->
+
+<!-- ```webaudio.js``` has been first coded as a tQuery plugins, ```tQuery.WebAudio```. -->
+<!-- You can find a [post about it](http://learningthreejs.com/blog/2012/03/20/sounds-for-more-realistic-3d/) -->
+<!-- on [learningthreejs](http://learningthreejs.com) blog. -->
+<!-- But this technology is so nice, it deserved its [own repository](https://github.com/jeromeetienne/webaudio.js). -->
+<!-- The library gained in flexibility in the process: It is now possible to display historgram in canvas2D -->
+<!-- of simply play sound :) -->
+
+<!-- Ok the very begining is real simple. We init a basic html page. -->
+<!-- Then we include the dependancies in javascript. -->
+<!-- We include [webaudio.js](https://github.com/jeromeetienne/webaudio.js) to handle the sound playing and analysis. -->
+<!-- Then we just have to include [tquery](https://github.com/jeromeetienne/tquery). -->
+<!-- tquery-bundle.js is tquery library with [three.js](http://github.com/mrdoob/three.js/) bundled in a single file for convenience. -->
+<!doctype html><title>webaudio example: histo3d</title>
+
+<script src="vendor/tquery/tquery-bundle.js"></script>
+
+<script src="../src/webaudio.core.js"></script>
+<script src="../src/webaudio.nodechainbuilder.js"></script>
+<script src="../src/webaudio.sound.js"></script>
+
+<body><script>
+	var webaudio	= new WebAudio();	
+
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
+
+	tQuery.createAmbientLight().addTo(world).color(0x888888);
+	tQuery.createDirectionalLight().addTo(world).position(+1,+1,1).color(0x88FF88);
+	tQuery.createDirectionalLight().addTo(world).position(-1,-1, 1).color(0x8888FF);
+
+	navigator.webkitGetUserMedia( {audio:true}, function (stream) {
+		var nodesChain	= new WebAudio.NodeChainBuilder(webaudio.context())
+			.mediaStreamSource(stream)
+			.gainNode().analyser().panner()
+		var sound	= new WebAudio.Sound(webaudio, nodesChain);
+
+
+		// # Some constants
+		var nBar	= 41*4;
+		var barW	= 80/nBar;
+		var bars3d	= [];
+
+		// # Create the 3D
+
+		// create the container group3D which gonna regroup all the bar3D
+		var group3d	= tQuery.createObject3D().scale(1/20).addTo(world);
+		for(var i = 0; i < nBar; i++){
+			var bar3d	= tQuery.createCube(barW, 10, 5, new THREE.MeshLambertMaterial({
+				ambient	: 0x888888,
+				color	: 0xFFFFFF
+			}));
+			bar3d.addTo(group3d).position((i-nBar/2)*barW, 0, 0);
+			bars3d.push(bar3d);
+		}
+		
+		// # Update Vuemeter
+		
+		// Here we hook a function to tQuery rendering loop, ```tQuery.Loop```. Thus
+		// this function gonna be executed everytime our 3D scene is rendered.
+		world.loop().hook(function(){
+			var nBarHalf	= Math.ceil(nBar/2)
+			var histo	= sound.makeHistogram(nBarHalf);
+			bars3d.forEach(function(bar3d, barIdx){
+				var histoIdx		= barIdx < nBarHalf ? nBarHalf-1-barIdx : barIdx - nBarHalf;
+				var height		= histo[histoIdx] / 256;
+				bar3d.get(0).scale.y	= height*3;
+				bar3d.get(0).material.color.setHSV(0.3+height*0.7,1,1)
+			});
+		});
+	});
+</script></body>

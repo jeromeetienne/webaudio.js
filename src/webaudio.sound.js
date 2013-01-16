@@ -20,7 +20,6 @@ WebAudio.Sound	= function(webaudio, nodeChain){
 	// setup this._chain
 	console.assert( nodeChain instanceof WebAudio.NodeChainBuilder );
 	this._chain	= nodeChain;
-
 	// connect this._chain.last() node to this._webaudio._entryNode()
 	this._chain.last().connect( this._webaudio._entryNode() );
 	
