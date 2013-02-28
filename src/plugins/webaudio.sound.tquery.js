@@ -3,6 +3,9 @@
  * follow a object3D
 */
 WebAudio.Sound.fn.follow	= function(object3d, world){
+	// parameter polymorphism
+	world	= world	|| tQuery.world;
+	// sanity check
 	console.assert( this.isFollowing() === false );
 	// handle parameter
 	if( object3d instanceof tQuery.Object3D ){

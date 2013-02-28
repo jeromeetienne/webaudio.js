@@ -68,24 +68,25 @@ WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 
 	// ensure object3d.matrixWorld is up to date
 	object3d.updateMatrixWorld();
-	
+
+	var matrixWorld	= object3d.matrixWorld;
 	////////////////////////////////////////////////////////////////////////
 	// set position
-	var position	= object3d.matrixWorld.getPosition();
+	var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	context.listener.setPosition(position.x, position.y, position.z);
 
 	////////////////////////////////////////////////////////////////////////
 	// set orientation
-	var mOrientation= object3d.matrixWorld.clone();
+	var mOrientation= matrixWorld.clone();
 	// zero the translation
 	mOrientation.setPosition({x : 0, y: 0, z: 0});
 	// Compute Front vector: Multiply the 0,0,1 vector by the world matrix and normalize the result.
 	var vFront= new THREE.Vector3(0,0,1);
-	mOrientation.multiplyVector3(vFront);
+	vFront.applyMatrix4(mOrientation)
 	vFront.normalize();
 	// Compute UP vector: Multiply the 0,-1,0 vector by the world matrix and normalize the result.
 	var vUp= new THREE.Vector3(0,-1, 0);
-	mOrientation.multiplyVector3(vUp);
+	vUp.applyMatrix4(mOrientation)
 	vUp.normalize();
 	// Set panner orientation
 	context.listener.setOrientation(vFront.x, vFront.y, vFront.z, vUp.x, vUp.y, vUp.z);
@@ -93,11 +94,11 @@ WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 	////////////////////////////////////////////////////////////////////////
 	// set velocity
 	if( this._prevPos === undefined ){
-		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	}else{
-		var position	= object3d.matrixWorld.getPosition();
-		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }

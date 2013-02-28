@@ -1,10 +1,9 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../vendor/tquery/tquery-bundle.js"></script>
-<script src="../vendor/tquery/tquery.norequirejs.js"></script>
+<script src="../vendor/tquery/build/tquery-bundle.js"></script>
 
-<script src='../vendor/tquery/tquery.checkerboard.js'></script>
-<script src='../vendor/tquery/tquery.world.createfog.js'></script>
-<script src='../vendor/tquery/tquery.directionallight.shortcuts.js'></script>
+<script src='../vendor/tquery/plugins/checkerboard/tquery.checkerboard.js'></script>
+<script src='../vendor/tquery/plugins/fog/tquery.world.createfog.js'></script>
+<script src='../vendor/tquery/plugins/shadowmap/tquery.light.shadowmap.js'></script>
 
 <script src="../vendor/dat.gui/dat.gui.js"></script>
 
@@ -40,8 +39,8 @@
 
 	object.get(0).castShadow	= true;
 
-	world.renderer().shadowMapEnabled	= true;
-	world.renderer().shadowMapSoft		= true;
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
 
 	tQuery.createAmbientLight().addTo(world).color(0x888888);
 	tQuery.createDirectionalLight().addTo(world).color(0xaaaaaa)
@@ -53,10 +52,10 @@
 		.shadowCamera(10, -10, 10, -10);
 
 	// tune camera
-	world.camera().position.z	= 2;
+	world.tCamera().position.z	= 2;
 	world.getCameraControls().target.set(0, 1, 0);
 	world.loop().hook(function(){
-		var position	= world.camera().position;
+		var position	= world.tCamera().position;
 		position.y	= Math.max(position.y, 1);
 	});
 

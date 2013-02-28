@@ -1,6 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="vendor/tquery/tquery-bundle.js"></script>
-<script src="vendor/tquery/tquery.norequirejs.js"></script>
+<script src="vendor/tquery/build/tquery-bundle.js"></script>
 
 <script src="../src/webaudio.core.js"></script>
 <script src="../src/webaudio.nodechainbuilder.js"></script>
@@ -22,13 +21,15 @@
 	var object3d	= tQuery.createTorus().addTo(world);
 	tQuery.createAxis().addTo(object3d);
 
-	navigator.webkitGetUserMedia( {audio:true}, function (stream) {
+	navigator.webkitGetUserMedia( {audio:true}, function(stream) {
 		var context	= world.getWebAudio().context();
+console.log('log', stream)
 		var nodesChain	= new WebAudio.NodeChainBuilder(context)
 			.mediaStreamSource(stream)
-			.gainNode().analyser().panner()
-			
-		var sound	= tQuery.createSound(world, nodesChain);
-		sound.follow(object3d, world);
+			.gainNode()
+			.analyser()
+			.panner();
+
+		var sound	= tQuery.createSound(world, nodesChain).follow(object3d, world);
 	});
 </script></body>

@@ -19,7 +19,7 @@
 <!-- tquery-bundle.js is tquery library with [three.js](http://github.com/mrdoob/three.js/) bundled in a single file for convenience. -->
 <!doctype html><title>webaudio example: histo3d</title>
 <script src="../build/webaudio.js"></script>
-<script src="vendor/tquery/tquery-bundle.js"></script>
+<script src="vendor/tquery/build/tquery-bundle.js"></script>
 <body><script>
 	// # Let's get started
 	
@@ -56,7 +56,7 @@
 	
 	// We Change the background color. This confusing line ensure the background of the
 	// 3D scene will be rendered as ```0x000000``` color, aka black.
-	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
+	world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
 
 	// Here we setup the lights of our scene. This is a key factor for the look and feel
 	// of your scene. We add a ambient light and 2 directional lights.
@@ -126,7 +126,7 @@
 			// i used "worked for me". Up to you to be creative and find the one that fit
 			// your own needs
 			bar3d.get(0).scale.y	= height*3;
-			bar3d.get(0).material.color.setHSV(0.3+height*0.7,1,1)
+			bar3d.get(0).material.color.setHSL(0.3+height*0.7,1,0.5)
 		});
 	});
 </script></body>

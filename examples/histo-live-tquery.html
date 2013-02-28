@@ -19,7 +19,7 @@
 <!-- tquery-bundle.js is tquery library with [three.js](http://github.com/mrdoob/three.js/) bundled in a single file for convenience. -->
 <!doctype html><title>webaudio example: histo3d</title>
 
-<script src="vendor/tquery/tquery-bundle.js"></script>
+<script src="vendor/tquery/build/tquery-bundle.js"></script>
 
 <script src="../src/webaudio.core.js"></script>
 <script src="../src/webaudio.nodechainbuilder.js"></script>
@@ -51,28 +51,29 @@
 		// # Create the 3D
 
 		// create the container group3D which gonna regroup all the bar3D
-		var group3d	= tQuery.createObject3D().scale(1/20).addTo(world);
-		for(var i = 0; i < nBar; i++){
-			var bar3d	= tQuery.createCube(barW, 10, 5, new THREE.MeshLambertMaterial({
-				ambient	: 0x888888,
-				color	: 0xFFFFFF
-			}));
-			bar3d.addTo(group3d).position((i-nBar/2)*barW, 0, 0);
-			bars3d.push(bar3d);
-		}
+		// var group3d	= tQuery.createObject3D().scale(1/20).addTo(world);
+		// for(var i = 0; i < nBar; i++){
+		// 	var bar3d	= tQuery.createCube(barW, 10, 5, new THREE.MeshLambertMaterial({
+		// 		ambient	: 0x888888,
+		// 		color	: 0xFFFFFF
+		// 	}));
+		// 	bar3d.addTo(group3d).position((i-nBar/2)*barW, 0, 0);
+		// 	bars3d.push(bar3d);
+		// }
 		
 		// # Update Vuemeter
 		
 		// Here we hook a function to tQuery rendering loop, ```tQuery.Loop```. Thus
 		// this function gonna be executed everytime our 3D scene is rendered.
 		world.loop().hook(function(){
+return;
 			var nBarHalf	= Math.ceil(nBar/2)
 			var histo	= sound.makeHistogram(nBarHalf);
 			bars3d.forEach(function(bar3d, barIdx){
 				var histoIdx		= barIdx < nBarHalf ? nBarHalf-1-barIdx : barIdx - nBarHalf;
 				var height		= histo[histoIdx] / 256;
 				bar3d.get(0).scale.y	= height*3;
-				bar3d.get(0).material.color.setHSV(0.3+height*0.7,1,1)
+				bar3d.get(0).material.color.setHSL(0.3+height*0.7,1,0.5)
 			});
 		});
 	});

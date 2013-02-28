@@ -5,8 +5,8 @@ tAnim.plugins['fixedCamRotatingObj']	= {
 		world.removeCameraControls();
 
 		tQuery('torus').position(0,1.3,0).rotation(0,0,0);		
-		world.camera().position.set(3, 2, 5).normalize().multiplyScalar(7);;
-		world.camera().lookAt(new THREE.Vector3(0, 1, 0));
+		world.tCamera().position.set(3, 2, 5).normalize().multiplyScalar(7);;
+		world.tCamera().lookAt(new THREE.Vector3(0, 1, 0));
 	},
 	destroy	: function(){
 		

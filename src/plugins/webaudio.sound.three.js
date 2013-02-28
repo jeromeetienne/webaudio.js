@@ -30,7 +30,7 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 
 	////////////////////////////////////////////////////////////////////////
 	// set position
-	var position	= matrixWorld.getPosition();
+	var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	this._panner.setPosition(position.x, position.y, position.z);
 
 	////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 	// zero the translation
 	mOrientation.setPosition({x : 0, y: 0, z: 0});
 	// Multiply the 0,0,1 vector by the world matrix and normalize the result.
-	mOrientation.multiplyVector3(vOrientation);
+	vOrientation.applyMatrix4(mOrientation)
 	vOrientation.normalize();
 	// Set panner orientation
 	this._panner.setOrientation(vOrientation.x, vOrientation.y, vOrientation.z);
@@ -48,11 +48,11 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 	////////////////////////////////////////////////////////////////////////
 	// set velocity
 	if( this._prevPos === undefined ){
-		this._prevPos	= matrixWorld.getPosition().clone();
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	}else{
-		var position	= matrixWorld.getPosition();
-		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= matrixWorld.getPosition().clone();
+		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		this._panner.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }

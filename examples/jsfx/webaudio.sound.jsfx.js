@@ -16,7 +16,7 @@ WebAudio.Sound.fn.generateWithJsfx	= function(lib){
 	var data	= jsfx.generate(params);
 
 	// Build the AudioBuffer
-	var buffer	= webaudio.context().createBuffer(1, data.length, 44100);
+	var buffer	= this._webaudio.context().createBuffer(1, data.length, 44100);
 	var fArray	= buffer.getChannelData(0);
 	for(var i = 0; i < fArray.length; i++){
 		fArray[i]	= data[i];
