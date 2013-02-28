@@ -401,7 +401,11 @@ WebAudio.Sound.prototype.isPlayable	= function(){
  * @param {Number} [time] time when to play the sound
 */
 WebAudio.Sound.prototype.play		= function(time){
+	// handle parameter polymorphism
 	if( time ===  undefined )	time	= 0;
+	// if not yet playable, ignore
+	// - usefull when the sound download isnt yet completed
+	if( this.isPlayable() === false )	return;
 	// clone the bufferSource
 	var clonedNode	= this._chain.cloneBufferSource();
 	// set the noteOn
