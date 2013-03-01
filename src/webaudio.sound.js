@@ -36,6 +36,10 @@ WebAudio.Sound	= function(webaudio, nodeChain){
 	console.assert(this._panner	, "no panner: not yet supported")
 };
 
+WebAudio.Sound.create	= function(webaudio, nodeChain){
+	return new WebAudio.Sound(webaudio,  nodeChain);
+}
+
 /**
  * destructor
 */
@@ -249,9 +253,9 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
 	var freqData	= this._privHisto;
 
 	// get the data
-	//analyser.getFloatFrequencyData(freqData)
+	//analyser.getFloatFrequencyData(freqData);
 	analyser.getByteFrequencyData(freqData);
-	//analyser.getByteTimeDomainData(freqData)
+	//analyser.getByteTimeDomainData(freqData);
 
 	/**
 	 * This should be in imageprocessing.js almost
@@ -284,15 +288,21 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
  * Load a sound
  *
  * @param {String} url the url of the sound to load
- * @param {Function} callback function to notify once the url is loaded (optional)
+ * @param {Function} onSuccess function to notify once the url is loaded (optional)
+ * @param {Function} onError function to notify if an error occurs (optional)
 */
-WebAudio.Sound.prototype.load = function(url, callback){
+WebAudio.Sound.prototype.load = function(url, onSuccess, onError){
+	// handle default arguments
+	onError	= onError	|| function(){
+		console.warn("unable to load sound "+url);
+	}
+	// try to load the user	
 	this._loadAndDecodeSound(url, function(buffer){
 		this._source.buffer	= buffer;
-		callback && callback(this);
+		onSuccess && onSuccess(this);
 	}.bind(this), function(){
-		console.warn("unable to load sound "+url);
-	});
+		onError && onError(this);
+	}.bind(this));
 	return this;	// for chained API
 };
 
