@@ -98,7 +98,7 @@ WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 	}else{
 		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		this._prevPos	= position.clone();
 		context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }

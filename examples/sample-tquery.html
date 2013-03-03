@@ -23,9 +23,10 @@
 
 	var sound	= tQuery.createSound().load('sounds/techno.mp3', function(sound){
 		//sound.nodes().bufferSource.loop	= true;
-		//sound.volume(1);
+		sound.volume(0.4);
 		sound.loop(true);
 		var source	= sound.play();
+		console.dir(source)
 		setTimeout(function(){
 			//source.stop();
 		}, 200)

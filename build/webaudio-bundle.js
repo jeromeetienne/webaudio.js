@@ -203,10 +203,24 @@ WebAudio.NodeChainBuilder	= function(audioContext){
 };
 
 /**
+ * creator
+ * 
+ * @param  {webkitAudioContext} 	audioContext the context	
+ * @return {WebAudio.NodeChainBuider}	just created object
+ */
+WebAudio.NodeChainBuilder.create= function(audioContext){
+	return new WebAudio.NodeChainBuilder(audioContext);
+}
+
+/**
  * destructor
 */
 WebAudio.NodeChainBuilder.prototype.destroy	= function(){
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//		getters								//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * getter for the nodes
@@ -229,6 +243,15 @@ WebAudio.NodeChainBuilder.prototype.last	= function(){
 	return this._lastNode;
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * add a node to the chain
+ * @param {[type]} node       [description]
+ * @param {[type]} properties [description]
+ */
 WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 {
 	// update this._bufferSourceDst - needed for .cloneBufferSource()
@@ -251,6 +274,10 @@ WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 	return this;
 };
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//		creator for each type of nodes					//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Clone the bufferSource. Used just before playing a sound
@@ -286,6 +313,18 @@ WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 WebAudio.NodeChainBuilder.prototype.mediaStreamSource	= function(stream, properties){
 //	console.assert( stream instanceof LocalMediaStream )
 	var node		= this._context.createMediaStreamSource(stream)
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+/**
+ * add a createMediaElementSource
+ * @param  {HTMLElement} element    the element to add
+ * @param {Object} [properties] properties to set in the created node
+ */
+WebAudio.NodeChainBuilder.prototype.mediaElementSource = function(element, properties){
+	console.assert(element instanceof HTMLAudioElement || element instanceof HTMLVideoElement)
+	var node		= this._context.createMediaElementSource(element)
 	this._nodes.bufferSource= node;
 	return this._addNode(node, properties)
 };
@@ -360,6 +399,10 @@ WebAudio.Sound	= function(webaudio, nodeChain){
 	console.assert(this._analyser	, "no analyser: not yet supported")
 	console.assert(this._panner	, "no panner: not yet supported")
 };
+
+WebAudio.Sound.create	= function(webaudio, nodeChain){
+	return new WebAudio.Sound(webaudio,  nodeChain);
+}
 
 /**
  * destructor
@@ -574,9 +617,9 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
 	var freqData	= this._privHisto;
 
 	// get the data
-	//analyser.getFloatFrequencyData(freqData)
+	//analyser.getFloatFrequencyData(freqData);
 	analyser.getByteFrequencyData(freqData);
-	//analyser.getByteTimeDomainData(freqData)
+	//analyser.getByteTimeDomainData(freqData);
 
 	/**
 	 * This should be in imageprocessing.js almost
@@ -609,15 +652,21 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
  * Load a sound
  *
  * @param {String} url the url of the sound to load
- * @param {Function} callback function to notify once the url is loaded (optional)
+ * @param {Function} onSuccess function to notify once the url is loaded (optional)
+ * @param {Function} onError function to notify if an error occurs (optional)
 */
-WebAudio.Sound.prototype.load = function(url, callback){
+WebAudio.Sound.prototype.load = function(url, onSuccess, onError){
+	// handle default arguments
+	onError	= onError	|| function(){
+		console.warn("unable to load sound "+url);
+	}
+	// try to load the user	
 	this._loadAndDecodeSound(url, function(buffer){
 		this._source.buffer	= buffer;
-		callback && callback(this);
+		onSuccess && onSuccess(this);
 	}.bind(this), function(){
-		console.warn("unable to load sound "+url);
-	});
+		onError && onError(this);
+	}.bind(this));
 	return this;	// for chained API
 };
 
@@ -725,7 +774,7 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 	}else{
 		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		this._prevPos	= position.clone();
 		this._panner.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }
@@ -872,7 +921,7 @@ WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 	}else{
 		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		this._prevPos	= position.clone();
 		context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }

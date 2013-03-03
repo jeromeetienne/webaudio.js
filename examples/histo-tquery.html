@@ -125,7 +125,7 @@
 			// to change its size and ```.material.color``` to change its color. The formulas
 			// i used "worked for me". Up to you to be creative and find the one that fit
 			// your own needs
-			bar3d.get(0).scale.y	= height*3;
+			bar3d.get(0).scale.y	= height*3 + 0.001;
 			bar3d.get(0).material.color.setHSL(0.3+height*0.7,1,0.5)
 		});
 	});

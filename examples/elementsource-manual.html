@@ -1,0 +1,30 @@
+<!doctype html>
+<body><script>
+	// Create an <audio> element dynamically.
+	var element	= document.createElement('audio')
+	element.src	= 'sounds/techno.mp3'
+
+	// var element	= document.createElement('video')
+	// element.src	= 'videos/sintel.ogv'
+
+	element.controls= true
+	element.autoplay= true
+
+
+	// Wait for window.onload to fire. See crbug.com/112368
+	element.addEventListener('canplaythrough', function(event){
+		var context	= new webkitAudioContext()
+		// Our <audio> element will be the audio source.
+		var source	= context.createMediaElementSource(element);
+		var analyser	= context.createAnalyser()
+
+		source.connect(analyser);
+		analyser.connect(context.destination);
+
+		var freqData	= new Uint8Array(analyser.frequencyBinCount);
+		setInterval(function(){
+			analyser.getByteFrequencyData(freqData);
+			console.log(freqData)
+		}, 100)
+	}, false);
+</script></body>

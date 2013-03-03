@@ -13,10 +13,24 @@ WebAudio.NodeChainBuilder	= function(audioContext){
 };
 
 /**
+ * creator
+ * 
+ * @param  {webkitAudioContext} 	audioContext the context	
+ * @return {WebAudio.NodeChainBuider}	just created object
+ */
+WebAudio.NodeChainBuilder.create= function(audioContext){
+	return new WebAudio.NodeChainBuilder(audioContext);
+}
+
+/**
  * destructor
 */
 WebAudio.NodeChainBuilder.prototype.destroy	= function(){
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//		getters								//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * getter for the nodes
@@ -39,6 +53,15 @@ WebAudio.NodeChainBuilder.prototype.last	= function(){
 	return this._lastNode;
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * add a node to the chain
+ * @param {[type]} node       [description]
+ * @param {[type]} properties [description]
+ */
 WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 {
 	// update this._bufferSourceDst - needed for .cloneBufferSource()
@@ -61,6 +84,10 @@ WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 	return this;
 };
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//		creator for each type of nodes					//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Clone the bufferSource. Used just before playing a sound
@@ -96,6 +123,18 @@ WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 WebAudio.NodeChainBuilder.prototype.mediaStreamSource	= function(stream, properties){
 //	console.assert( stream instanceof LocalMediaStream )
 	var node		= this._context.createMediaStreamSource(stream)
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+/**
+ * add a createMediaElementSource
+ * @param  {HTMLElement} element    the element to add
+ * @param {Object} [properties] properties to set in the created node
+ */
+WebAudio.NodeChainBuilder.prototype.mediaElementSource = function(element, properties){
+	console.assert(element instanceof HTMLAudioElement || element instanceof HTMLVideoElement)
+	var node		= this._context.createMediaElementSource(element)
 	this._nodes.bufferSource= node;
 	return this._addNode(node, properties)
 };
