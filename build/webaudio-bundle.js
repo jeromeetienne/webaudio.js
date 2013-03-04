@@ -44,8 +44,12 @@
 */
 WebAudio	= function(){
 	// sanity check - the api MUST be available
-	console.assert(WebAudio.isAvailable === true, 'webkitAudioContext isnt available on your browser');
-
+	if( WebAudio.isAvailable === false ){
+		this._addRequiredMessage();
+		// Throw an error to stop execution
+		throw new Error('WebAudio API is required and not available.')	
+	}
+	
 	// create the context
 	this._ctx	= new webkitAudioContext();
 
@@ -85,6 +89,31 @@ WebAudio.prototype.destroy	= function(){
  * @return {Boolean} true if it is available or not
 */
 WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
+
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+WebAudio.prototype._addRequiredMessage = function(parent) {
+	// handle defaults arguements
+	parent	= parent || document.body;
+	// message directly taken from Detector.js
+	var domElement = document.createElement( 'div' );
+	domElement.style.fontFamily	= 'monospace';
+	domElement.style.fontSize	= '13px';
+	domElement.style.textAlign	= 'center';
+	domElement.style.background	= '#eee';
+	domElement.style.color		= '#000';
+	domElement.style.padding	= '1em';
+	domElement.style.width		= '475px';
+	domElement.style.margin		= '5em auto 0';
+	domElement.innerHTML		= [
+		'Your browser does not seem to support <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">WebAudio API</a>.<br />',
+		'Try with <a href="https://www.google.com/intl/en/chrome/browser/">Chrome Browser</a>.'
+	].join( '\n' );
+	// add it to the parent
+	parent.appendChild(domElement);
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
