@@ -89,13 +89,13 @@ WebAudio.Sound.prototype.play		= function(time){
 	// clone the bufferSource
 	var clonedNode	= this._chain.cloneBufferSource();
 	// set the noteOn
-	clonedNode.noteOn(time);
+	clonedNode.start(time);
 	// create the source object
 	var source	= {
 		node	: clonedNode,
 		stop	: function(time){
 			if( time ===  undefined )	time	= 0;
-			this.node.noteOff(time);
+			this.node.stop(time);
 			return source;	// for chained API
 		}
 	}
