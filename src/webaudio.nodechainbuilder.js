@@ -5,7 +5,8 @@
  * @param {webkitAudioContext} audioContext the audio context
 */
 WebAudio.NodeChainBuilder	= function(audioContext){
-	console.assert( audioContext instanceof webkitAudioContext );
+	console.assert( (audioContext instanceof AudioContext) ||
+                        (audioContext instanceof webkitAudioContext) );
 	this._context	= audioContext;
 	this._firstNode	= null;
 	this._lastNode	= null;
@@ -167,7 +168,7 @@ WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
  * @param {Object} [properties] properties to set in the created node
 */
 WebAudio.NodeChainBuilder.prototype.gainNode	= function(properties){
-	var node		= this._context.createGainNode()
+	var node		= this._context.createGain()
 	this._nodes.gainNode	= node;
 	return this._addNode(node, properties)
 };

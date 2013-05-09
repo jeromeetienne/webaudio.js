@@ -49,7 +49,11 @@ WebAudio	= function(){
 	}
 	
 	// create the context
-	this._ctx	= new webkitAudioContext();
+        try {
+	  this._ctx	= new webkitAudioContext();
+        } catch(e) {
+          this._ctx = new webkitAudioContext();
+        }
 
 	// setup internal variable
 	this._muted	= false;
@@ -57,7 +61,7 @@ WebAudio	= function(){
 
 	// setup the end of the node chain
 	// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ 
-	this._gainNode	= this._ctx.createGainNode();
+	this._gainNode	= this._ctx.createGain();
 	this._compressor= this._ctx.createDynamicsCompressor();
 	this._gainNode.connect( this._compressor );
 	this._compressor.connect( this._ctx.destination );	
@@ -86,7 +90,7 @@ WebAudio.prototype.destroy	= function(){
  *
  * @return {Boolean} true if it is available or not
 */
-WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
+WebAudio.isAvailable	= window.AudioContext ? true : (!!window.webkitAudioContext);
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//
