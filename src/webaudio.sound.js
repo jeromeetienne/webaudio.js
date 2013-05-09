@@ -225,7 +225,7 @@ WebAudio.Sound.prototype.tone	= function(hertz, seconds){
 	var sampleRate	= 44100;
 	var amplitude	= 2;
 	// create the buffer
-	var buffer	= webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
+	var buffer	= this._webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
 	var fArray	= buffer.getChannelData(0);
 	// fill the buffer
 	for(var i = 0; i < fArray.length; i++){

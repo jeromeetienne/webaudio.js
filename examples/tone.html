@@ -10,5 +10,9 @@
 	// create a sound 
 	var sound	= webaudio.createSound();
 	// set a tone and play it
-	sound.tone(350, 2).loop(true).play();
+	var instance	= sound.tone(200, 0.1).loop(true).play();
+
+	setTimeout(function(){
+		instance.stop()
+	}, 2000)
 </script></body>
