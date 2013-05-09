@@ -49,12 +49,11 @@ WebAudio	= function(){
 	}
 	
 	// create the context
-        try {
-	  this._ctx	= new webkitAudioContext();
-        } catch(e) {
-          this._ctx = new webkitAudioContext();
-        }
-
+	try {
+		this._ctx	= new AudioContext();
+	} catch(e) {
+		this._ctx	= new webkitAudioContext();
+	}
 	// setup internal variable
 	this._muted	= false;
 	this._volume	= 1;
