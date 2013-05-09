@@ -50,15 +50,18 @@ WebAudio	= function(){
 	}
 	
 	// create the context
-	this._ctx	= new webkitAudioContext();
-
+	try {
+		this._ctx	= new AudioContext();
+	} catch(e) {
+		this._ctx	= new webkitAudioContext();
+	}
 	// setup internal variable
 	this._muted	= false;
 	this._volume	= 1;
 
 	// setup the end of the node chain
 	// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ 
-	this._gainNode	= this._ctx.createGainNode();
+	this._gainNode	= this._ctx.createGain();
 	this._compressor= this._ctx.createDynamicsCompressor();
 	this._gainNode.connect( this._compressor );
 	this._compressor.connect( this._ctx.destination );	
@@ -87,7 +90,7 @@ WebAudio.prototype.destroy	= function(){
  *
  * @return {Boolean} true if it is available or not
 */
-WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
+WebAudio.isAvailable	= window.AudioContext ? true : (!!window.webkitAudioContext);
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//
@@ -216,14 +219,16 @@ WebAudio.prototype._pageVisibilityCtor	= function(){
 WebAudio.prototype._pageVisibilityDtor	= function(){
 	// unbind the event itself
 	document.removeEventListener(this._pageVisibilityEventStr, this._$pageVisibilityCallback, false);
-}/**
+}
+/**
  * Constructor
  *
  * @class builder to generate nodes chains. Used in WebAudio.Sound
  * @param {webkitAudioContext} audioContext the audio context
 */
 WebAudio.NodeChainBuilder	= function(audioContext){
-	console.assert( audioContext instanceof webkitAudioContext );
+	console.assert( (audioContext instanceof AudioContext) ||
+                        (audioContext instanceof webkitAudioContext) );
 	this._context	= audioContext;
 	this._firstNode	= null;
 	this._lastNode	= null;
@@ -385,7 +390,7 @@ WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
  * @param {Object} [properties] properties to set in the created node
 */
 WebAudio.NodeChainBuilder.prototype.gainNode	= function(properties){
-	var node		= this._context.createGainNode()
+	var node		= this._context.createGain()
 	this._nodes.gainNode	= node;
 	return this._addNode(node, properties)
 };
@@ -481,13 +486,13 @@ WebAudio.Sound.prototype.play		= function(time){
 	// clone the bufferSource
 	var clonedNode	= this._chain.cloneBufferSource();
 	// set the noteOn
-	clonedNode.noteOn(time);
+	clonedNode.start(time);
 	// create the source object
 	var source	= {
 		node	: clonedNode,
 		stop	: function(time){
 			if( time ===  undefined )	time	= 0;
-			this.node.noteOff(time);
+			this.node.stop(time);
 			return source;	// for chained API
 		}
 	}
@@ -617,7 +622,7 @@ WebAudio.Sound.prototype.tone	= function(hertz, seconds){
 	var sampleRate	= 44100;
 	var amplitude	= 2;
 	// create the buffer
-	var buffer	= webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
+	var buffer	= this._webaudio.context().createBuffer(nChannels, seconds*sampleRate, sampleRate);
 	var fArray	= buffer.getChannelData(0);
 	// fill the buffer
 	for(var i = 0; i < fArray.length; i++){

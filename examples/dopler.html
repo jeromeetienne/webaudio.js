@@ -1,0 +1,31 @@
+<!doctype html><title>webaudio example: histo3d</title>
+<script src="vendor/tquery/build/tquery-bundle.js"></script>
+<script src="../src/webaudio.core.js"></script>
+<script src="../src/webaudio.nodechainbuilder.js"></script>
+<script src="../src/webaudio.sound.js"></script>
+<script src="../src/plugins/webaudio.tquery.js"></script>
+<script src="../src/plugins/webaudio.sound.three.js"></script>
+<script src="../src/plugins/webaudio.sound.tquery.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	world.removeCameraControls()
+	world.tCamera().position.z	= 0
+	// your code goes here
+	world.loop().hook(function(delta, now){
+		var range	= 30
+		var z	= -range/2 + (5 * now * Math.PI * 2) % range;
+		object.position(2, 0, z)
+	})
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+
+	var url	= 'sounds/95004__j1987__generator.mp3';
+	tQuery.createSound().load(url, function(sound){
+		window.uterance	= sound.loop(true).follow(object).play();
+		uterance.node.playbackRate.value 	= 0.3
+		sound.nodes().panner.rolloffFactor	= 200
+		uterance.node.gain.value		= 75
+	});
+</script></body>
