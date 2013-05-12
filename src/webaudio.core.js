@@ -31,6 +31,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
+window.AudioContext	= window.AudioContext || window.webkitAudioContext;
+
 /**
  * Main class to handle webkit audio
  * 
@@ -49,11 +51,7 @@ WebAudio	= function(){
 	}
 	
 	// create the context
-	try {
-		this._ctx	= new AudioContext();
-	} catch(e) {
-		this._ctx	= new webkitAudioContext();
-	}
+	this._ctx	= new AudioContext();
 	// setup internal variable
 	this._muted	= false;
 	this._volume	= 1;
@@ -85,11 +83,9 @@ WebAudio.prototype.destroy	= function(){
 };
 
 /**
- * 
- *
  * @return {Boolean} true if it is available or not
 */
-WebAudio.isAvailable	= window.AudioContext ? true : (!!window.webkitAudioContext);
+WebAudio.isAvailable	= window.AudioContext ? true : false;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//

@@ -2,11 +2,10 @@
  * Constructor
  *
  * @class builder to generate nodes chains. Used in WebAudio.Sound
- * @param {webkitAudioContext} audioContext the audio context
+ * @param {AudioContext} audioContext the audio context
 */
 WebAudio.NodeChainBuilder	= function(audioContext){
-	console.assert( (audioContext instanceof AudioContext) ||
-                        (audioContext instanceof webkitAudioContext) );
+	console.assert(audioContext instanceof AudioContext);
 	this._context	= audioContext;
 	this._firstNode	= null;
 	this._lastNode	= null;

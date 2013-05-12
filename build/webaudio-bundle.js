@@ -33,6 +33,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
+window.AudioContext	= window.AudioContext || window.webkitAudioContext;
+
 /**
  * Main class to handle webkit audio
  * 
@@ -51,11 +53,7 @@ WebAudio	= function(){
 	}
 	
 	// create the context
-	try {
-		this._ctx	= new AudioContext();
-	} catch(e) {
-		this._ctx	= new webkitAudioContext();
-	}
+	this._ctx	= new AudioContext();
 	// setup internal variable
 	this._muted	= false;
 	this._volume	= 1;
@@ -87,11 +85,9 @@ WebAudio.prototype.destroy	= function(){
 };
 
 /**
- * 
- *
  * @return {Boolean} true if it is available or not
 */
-WebAudio.isAvailable	= window.AudioContext ? true : (!!window.webkitAudioContext);
+WebAudio.isAvailable	= window.AudioContext ? true : false;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//
@@ -225,11 +221,10 @@ WebAudio.prototype._pageVisibilityDtor	= function(){
  * Constructor
  *
  * @class builder to generate nodes chains. Used in WebAudio.Sound
- * @param {webkitAudioContext} audioContext the audio context
+ * @param {AudioContext} audioContext the audio context
 */
 WebAudio.NodeChainBuilder	= function(audioContext){
-	console.assert( (audioContext instanceof AudioContext) ||
-                        (audioContext instanceof webkitAudioContext) );
+	console.assert(audioContext instanceof AudioContext);
 	this._context	= audioContext;
 	this._firstNode	= null;
 	this._lastNode	= null;
