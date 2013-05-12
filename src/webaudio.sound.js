@@ -134,7 +134,7 @@ WebAudio.Sound.prototype.loop	= function(value){
 WebAudio.Sound.prototype.buffer	= function(value){
 	if( value === undefined )	return this._source.buffer;
 	this._source.buffer	= value;
-	return this;	// for chained API
+	return this;	// for chained API 
 };
 
 
