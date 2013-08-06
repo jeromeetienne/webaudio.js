@@ -71,7 +71,7 @@
 					<% }else if(section.type === "code" ){ %>
 						<% var codeIsEmpty = section.text.match(/^[\s\n]*$/) ? true : false; %>
 						<% if( codeIsEmpty === false ){ %>
-							<pre class='span8 prettyprint <%= codeIsEmpty ? '' : 'linenums:'+lineNum %>'><%= section.text %></pre>
+							<pre class="span8 prettyprint <%= codeIsEmpty ? '' : 'linenums:'+lineNum %>"><%= section.text %></pre>
 							<% lineNum += section.text.match(/\n/g) ? section.text.match(/\n/g).length : 0; %>
 						<% }else{ %>
 							<pre class='span8'></pre>
