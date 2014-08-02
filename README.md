@@ -4,7 +4,7 @@ It is a direct adaptation of
 
 ## Examples
 
-* [minimal](http://jeromeetienne.github.com/webaudio.js/examples/)
+* [minimal](https://jeromeetienne.github.io/webaudio.js/#examples)
 * [Sample use with tQuery](http://jeromeetienne.github.com/webaudio.js/examples/sample-tquery.html)
 * [Playground with tQuery](http://jeromeetienne.github.com/webaudio.js/examples/playground/)
 
